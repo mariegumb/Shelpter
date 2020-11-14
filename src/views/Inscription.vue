@@ -11,30 +11,33 @@
           <ion-title size="large">Inscription</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-card-content>
-      <ion-item class="ion-no-padding">
-        <ion-input class="pl-0" placeholder="Nom"></ion-input>
-      </ion-item>
-      <ion-item class="ion-no-padding">
-        <ion-input class="pl-0" placeholder="Prénom"></ion-input>
-      </ion-item>
-        <ion-item class="ion-no-padding">
-          <ion-input class="pl-0" placeholder="Numero de téléphone"></ion-input>
-        </ion-item>
-      <ion-item class="ion-no-padding">
-        <ion-input class="pl-0" placeholder="Mail"></ion-input>
-      </ion-item>
-      <ion-item class="ion-no-padding">
-        <ion-input placeholder="Mot de passe" type="password"></ion-input>
-      </ion-item>
-      <ion-item class="ion-no-padding">
-        <ion-input placeholder="Confirmation mot de passe" type="password"></ion-input>
-      </ion-item>
-      <router-link to="/login">
-        <ion-button>S'inscrire</ion-button>
-      </router-link>
+      <ion-card>
+
+        <ion-card-content>
+          <ion-item class="ion-no-padding">
+            <ion-input class="pl-0" placeholder="Nom"></ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-input class="pl-0" placeholder="Prénom"></ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-input class="pl-0" placeholder="Numero de téléphone"></ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-input class="pl-0" placeholder="Mail"></ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-input placeholder="Mot de passe" type="password"></ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding">
+            <ion-input placeholder="Confirmation mot de passe" type="password"></ion-input>
+          </ion-item>
+          <router-link to="/login">
+            <ion-button>S'inscrire</ion-button>
+          </router-link>
         </ion-card-content>
 
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
