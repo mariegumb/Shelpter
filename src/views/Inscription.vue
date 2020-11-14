@@ -8,7 +8,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Inscription</ion-title>
+          <ion-title size="large" class="text-purple-600 text-center">Inscription</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-card>
@@ -33,7 +33,7 @@
             <ion-input placeholder="Confirmation mot de passe" type="password"></ion-input>
           </ion-item>
           <router-link to="/login">
-            <ion-button>S'inscrire</ion-button>
+            <ion-button color="purple" >S'inscrire</ion-button>
           </router-link>
         </ion-card-content>
 
@@ -50,3 +50,16 @@ export default  {
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonItem, IonButton, IonInput, IonCardContent}
 }
 </script>
+
+<style>
+
+.ion-color-purple {
+  --ion-color-base: #805ad5;
+  --ion-color-base-rgb: 107,70,193;
+  --ion-color-contrast: #FFFFF;
+  --ion-color-contrast-rgb: 0,0,0;
+  --ion-color-shade: #6b46c1;
+  --ion-color-tint: #6b46c1;
+}
+
+</style>
