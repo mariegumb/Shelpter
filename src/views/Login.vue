@@ -1,7 +1,7 @@
 <template>
   <ion-page>
-    <ion-header >
-      <ion-toolbar >
+    <ion-header>
+      <ion-toolbar>
           <ion-title >Login</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -30,11 +30,11 @@
                 <span class="text-purple-6git00">Pas encore de compte ?</span>
               </div>
             </router-link>
-            <div class="mt-4 text-right">
-              <router-link to="/accueil">
+            <router-link to="/tabs/accueil">
+              <div class="mt-4 text-right">
                 <ion-button expand="block" color="purple">Se connecter</ion-button>
-              </router-link>
-            </div>
+              </div>
+            </router-link>
           </div>
         </ion-card-content>
       </ion-card>
@@ -43,11 +43,18 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/vue';
-
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput,
+ IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 export default  {
   name: 'Login',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput, IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle }
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput,
+   IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle},
+    
+  setup(){
+    const router = useRouter();
+    return {router};
+  }
 }
 </script>
 

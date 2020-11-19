@@ -1,5 +1,7 @@
+import component from '*.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import Tabs from '@/views/Tabs.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,9 +17,36 @@ const routes: Array<RouteRecordRaw> = [
     component:() => import('@/views/Inscription.vue')
   },
   {
-    path:'/accueil',
-    component:() => import('@/views/Accueil.vue')
-  },
+    path:'/tabs/',
+    name:'Tabs',
+    component:Tabs,
+    children:[
+      {
+        path:'',
+        redirect:'accueil'
+      },
+      {
+        path:'accueil',
+        component:() => import('@/views/Accueil.vue')
+      },
+      {
+        path:'notifications',
+        component:() => import('@/views/Notifications.vue')
+      },
+      {
+        path:'profil',
+        component:() => import('@/views/Profil.vue')
+      },
+      {
+        path:'reglages',
+        component:() => import('@/views/Reglages.vue')
+      },
+      {
+        path:'map',
+        component:() => import('@/views/Map.vue')
+      }
+    ]
+  }
 ]
 
 const router = createRouter({

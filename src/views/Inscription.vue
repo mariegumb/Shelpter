@@ -32,9 +32,7 @@
           <ion-item class="ion-no-padding">
             <ion-input placeholder="Confirmation mot de passe" type="password"></ion-input>
           </ion-item>
-          <router-link to="/login">
-            <ion-button color="purple" >S'inscrire</ion-button>
-          </router-link>
+          <ion-button @click="()=>router.go(-1)" color="purple" >S'inscrire</ion-button>
         </ion-card-content>
 
       </ion-card>
@@ -43,11 +41,22 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonButton, IonInput, IonCardContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+ IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 
 export default  {
   name: 'Inscription',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonItem, IonButton, IonInput, IonCardContent}
+  components: { IonHeader, IonToolbar, IonTitle, IonContent,
+   IonPage, IonItem, IonButton, IonInput, IonCardContent, IonCard},
+  
+  setup(){
+    const router = useRouter();
+    
+    return {
+      router
+    }
+  }
 }
 </script>
 
