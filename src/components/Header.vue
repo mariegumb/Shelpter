@@ -1,7 +1,11 @@
 <template>
     <ion-header collapse="condense">
         <ion-toolbar>
-        <ion-title size="large" color="purple" class=" text-center">Localiz'</ion-title>
+        <ion-title size="large" color="purple" class=" text-center">
+          <span>S</span>
+          <span class="underline">HELP</span>
+          <span>TER</span>
+          </ion-title>
         </ion-toolbar>
     </ion-header>
 </template>

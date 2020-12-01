@@ -8,7 +8,11 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large" class="text-purple-600 text-center pt-2">Localiz'</ion-title>
+          <ion-title size="large" class="text-purple-600 text-center pt-2">
+            <span>S</span>
+            <span class="underline">HELP</span>
+            <span>TER</span>
+          </ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-card>

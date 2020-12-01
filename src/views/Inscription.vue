@@ -32,7 +32,7 @@
           <ion-item class="ion-no-padding">
             <ion-input placeholder="Confirmation mot de passe" type="password"></ion-input>
           </ion-item>
-          <ion-button @click="()=>router.go(-1)" color="purple" >S'inscrire</ion-button>
+          <ion-button @click="router.go(-1)" color="purple" >S'inscrire</ion-button>
         </ion-card-content>
 
       </ion-card>
