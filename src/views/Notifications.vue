@@ -16,9 +16,6 @@ import axios from 'axios';
 export default {
     name:"Notifications",
     components: {IonPage, IonContent, Header, IonTitle },
-    setup(){
-        return axios
-    },
     data(){
         return{
             users: null
@@ -27,10 +24,7 @@ export default {
     methods:{
         async getUsers(){
             try{
-                this.users = await axios.get('localhost:8080/users',{
-  mode: 'cors',
-  credentials: 'include'
-});
+                this.users = await axios.get('http://localhost:3000/users');
             }
             catch(err){
                 console.log(err);
