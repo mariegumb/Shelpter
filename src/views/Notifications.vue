@@ -3,7 +3,7 @@
         <Header/>
         <ion-content :fullScreen="true">
             <ion-title @click="getUsers">Notifications</ion-title>
-            <div v-for="user in users" v-bind:key="user.id">{{user}}</div>
+            <div v-for="user in users" v-bind:key="user.id">{{user.login}}</div>
         </ion-content>
     </ion-page>
 </template>
@@ -24,7 +24,7 @@ export default {
     methods:{
         async getUsers(){
             try{
-                this.users = await axios.get('http://localhost:3000/users');
+                this.users = await (await axios.get('http://localhost:3000/users')).data;
             }
             catch(err){
                 console.log(err);
