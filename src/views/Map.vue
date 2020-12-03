@@ -21,6 +21,7 @@
 import { IonPage, IonContent, IonProgressBar, IonButton } from '@ionic/vue';
 import Header from '@/components/Header.vue';
 import { Geolocation } from '@ionic-native/geolocation';
+import { socket } from '@/composables/useSocket'
 
 export default {
     name:"Map",
@@ -33,17 +34,20 @@ export default {
     },
     methods:{
       async getLocation(){
-        this.loading = true
+        /*this.loading = true
         try{
           const res = await Geolocation.getCurrentPosition()
+          console.log(res);
           this.coords = res.coords
         } catch (e){
           console.error(e)
         }
-        this.loading = false
+        this.loading = false*/
 
         const watch = Geolocation.watchPosition();
         watch.subscribe((data) => {
+          console.log(data)
+          socket.emit('watchPosition',data.coords.longitude,data.coords.latitude);
           this.coords = data.coords
         });
       }
