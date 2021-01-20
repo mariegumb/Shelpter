@@ -25,11 +25,10 @@
 
 <script lang="ts">
 import { IonPage, IonTitle , IonContent } from '@ionic/vue';
-import * as allIcons from 'ionicons/icons';
 import Header from '@/components/Header.vue';
 
 export default  {
   name: 'Accueil',
-  components: { IonPage, Header, IonContent,  }
+  components: { IonPage, Header, IonContent }
 }
 </script>

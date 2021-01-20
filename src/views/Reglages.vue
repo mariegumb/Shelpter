@@ -23,7 +23,7 @@ import {addOutline} from 'ionicons/icons';
 
 export default {
     name:"Reglages",
-    components: {ButtonAlerte, IonPage, IonContent, Header,  },
+    components: {ButtonAlerte, IonPage, IonContent, Header },
   setup() {
     return {
       addOutline,
