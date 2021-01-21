@@ -23,22 +23,23 @@
 
         <ion-card-content>
           <ion-item class="ion-no-padding">
-            <ion-input class="pl-0" placeholder="Mail"></ion-input>
+            <ion-input v-model="inptLogin" class="pl-0" placeholder="Mail ou Login"></ion-input>
           </ion-item>
           <ion-item class="ion-no-padding">
-            <ion-input placeholder="Mot de passe" type="password"></ion-input>
+            <ion-input v-model="inptMdp" placeholder="Mot de passe" type="password"></ion-input>
           </ion-item>
+          <div v-if="wrongCred">
+            <ion-label >Wrong credentials</ion-label>
+          </div>
           <div class="mt-4 p-2">
             <router-link to="/inscription">
               <div class="text-right" >
                 <span class="text-purple-6git00">Pas encore de compte ?</span>
               </div>
             </router-link>
-            <router-link to="/tabs/accueil">
-              <div class="mt-4 text-right">
-                <ion-button expand="block" color="purple">Se connecter</ion-button>
-              </div>
-            </router-link>
+            <div class="mt-4 text-right">
+              <ion-button @click="checkCredentials" expand="block" color="purple">Se connecter</ion-button>
+            </div>
           </div>
         </ion-card-content>
       </ion-card>
@@ -46,14 +47,48 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput,
- IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/vue';
+ IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 export default  {
   name: 'Login',
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput,
-   IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle},
+   IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel},
+
+  data(){
+    return{
+      inptLogin: "",
+      inptMdp: "",
+      wrongCred: false
+    }
+  },
+
+  methods:{
+        async checkCredentials(){
+          if(this.inptLogin != "" && this.inptMdp != ""){
+            try{
+                const addr = 'http://localhost:3000/users/login/'+this.inptLogin+'/'+this.inptMdp;
+                const valid = await (await axios.get(addr)).data;
+                if(valid){
+                  this.router.push('/tabs/accueil')
+                }
+                else{
+                  this.wrongCred = true;
+                }
+            }
+            catch(err){
+                console.log(err);
+                throw err;
+            }
+          }
+          else{
+            this.wrongCred = true;
+          }
+        }
+    },
     
   setup(){
     const router = useRouter();
