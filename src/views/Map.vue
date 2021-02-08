@@ -19,7 +19,7 @@
 
 <script>
 import { IonPage, IonContent, IonProgressBar, IonButton } from '@ionic/vue';
-import Header from '@/components/Header.vue';
+import Header from '@/components/Header';
 import { Geolocation } from '@ionic-native/geolocation';
 import { socket } from '@/composables/useSocket'
 

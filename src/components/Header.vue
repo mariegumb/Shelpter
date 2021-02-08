@@ -10,7 +10,7 @@
     </ion-header>
 </template>
 
-<script lang="ts">
+<script>
 import { IonHeader, IonToolbar, IonTitle } from '@ionic/vue';
 
 export default {

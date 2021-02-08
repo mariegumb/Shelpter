@@ -46,7 +46,7 @@
 
 <script>
 import { IonPage, IonContent, IonTitle } from '@ionic/vue';
-import Header from '@/components/Header.vue';
+import Header from '@/components/Header';
 import {brushOutline} from "ionicons/icons";
 
 
