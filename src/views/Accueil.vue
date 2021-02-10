@@ -3,15 +3,11 @@
     <Header/>
     <ion-content :fullscreen="true">
       <div class="h-full flex items-center">
-          <div class="w-full">
-            <div v-for="pair in prefs" v-bind:key="pair">
-              <div class="flex justify-center">
-                <div v-for="pref in pair" v-bind:key="pref.name">
-                  <button type="button" class="rounded-full w-40 h-40 focus:outline-none text-white text-2xl my-3 mx-3" :class="pref.color + ' focus:' + pref.color.replace('500','600')">
-                    {{pref.name}}
-                  </button>
-                </div>
-              </div>
+          <div class="w-full grid grid-cols-2">
+            <div :class="{'col-span-2 text-center' : alerts.length % 2 === 1 && index === alerts.length -1}" v-for="(alert, index) in alerts" v-bind:key="index">
+              <button @click="activateAlert(alert)" type="button" class="rounded-full w-40 h-40 focus:outline-none text-white text-2xl my-3 mx-3" :class="alert.color + ' focus:' + alert.color.replace('500','600')">
+                {{alert.name}}
+              </button>
             </div>
           </div>
       </div>
@@ -22,44 +18,37 @@
 <script>
 import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
-import {get, set} from '@/composables/storage'
+import {get} from '@/composables/storage'
+import { emitter } from '@/emitter';
 
 export default  {
   name: 'Accueil',
   components: { IonPage, Header, IonContent },
-  
   data(){
-    return{
-      prefs: []
+    return {
+      alerts: []
     }
   },
-
-  beforeMount(){
-    this.separatePrefs();
+  created(){
+    this.fetchAlerts()
   },
-
+  updated(){
+      this.fetchAlerts()
+  },
   methods:{
-    async separatePrefs(){
-      /*await set('alerts',[
-        {name:'Alerte 1',color:'bg-purple-500',tel:false,map:false},
-        {name:'Alerte 2',color:'bg-pink-500',tel:true,map:true},
-        {name:'Alerte 3',color:'bg-blue-500',tel:true,map:false}
-      ]);*/
-
-      //Separate the alerts in pairs for display in different divs
-      const tempPref = await get('alerts');
-      let pair = false;
-      for(let i=0;i<tempPref.length;i++){
-        if(pair){
-          this.prefs[this.prefs.length-1]=[this.prefs[this.prefs.length-1][0],tempPref[i]];
-          pair = false;
-        }
-        else{
-          this.prefs[this.prefs.length]=[tempPref[i]];
-          pair = true;
-        }
-      }
+    async fetchAlerts(){
+      this.alerts = await get('alerts')
+    },
+  },
+  setup(){
+    
+    const activateAlert = (alert) => {
+      emitter.emit('alert', alert)
     }
-  }
+
+    return{
+      activateAlert,
+    }
+  },
 }
 </script>

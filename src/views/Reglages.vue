@@ -62,7 +62,11 @@ export default {
         console.log("cancelled");
       }
       else{
-        this.prefs.push(result.data);
+        if(this.prefs){
+          this.prefs.push(result.data)
+        }  else {
+          this.prefs = [result.data]
+        }
         set('alerts',this.prefs);
       }
     }
