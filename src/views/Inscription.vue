@@ -48,6 +48,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
  IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { postUser } from '@/composables/mongoApi';
 
 export default  {
   name: 'Inscription',
@@ -80,7 +81,7 @@ export default  {
               prenom: this.prenom,
               mail: this.mail
             };
-            await axios.post('http://localhost:3000/users',user);
+            await axios.post(postUser(),user);
             this.router.go(-1);
           }
           else{

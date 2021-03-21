@@ -40,23 +40,36 @@
               <span>Caroline</span>
             </div>
           </div>
+          <ion-button  @click="deconnect" color="purple">Déconnexion</ion-button>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonContent, IonTitle } from '@ionic/vue';
+import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import Header from '@/components/Header';
 import {brushOutline} from "ionicons/icons";
+import { remove } from '@/composables/storage';
+import { useRouter } from 'vue-router';
 
 
 
 export default {
     name:"Profil",
-    components: {IonPage, IonContent, Header,  },
+    components: {IonPage, IonContent, Header, IonButton },
   setup() {
+    const router = useRouter();
     return {
       brushOutline,
+      router
+    };
+  },
+
+  methods:{
+    async deconnect(){
+      await remove('login');
+      await remove('mdp');
+      this.router.go('/login')
     }
   }
 }

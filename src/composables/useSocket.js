@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
+import { addr } from '@/composables/mongoApi';
 
-export const socket = io('localhost:3000');
+export const socket = io(addr);
 
 socket.on('welcome',(args)=>{
     console.log(args)

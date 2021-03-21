@@ -52,6 +52,8 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput,
  IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { getCheckCred } from '@/composables/mongoApi';
+import { get, set } from '@/composables/storage';
 
 export default  {
   name: 'Login',
@@ -70,9 +72,11 @@ export default  {
         async checkCredentials(){
           if(this.inptLogin != "" && this.inptMdp != ""){
             try{
-                const addr = 'http://localhost:3000/users/login/'+this.inptLogin+'/'+this.inptMdp;
+                const addr = getCheckCred(this.inptLogin,this.inptMdp);
                 const valid = await (await axios.get(addr)).data;
                 if(valid){
+                  set('login',this.inptLogin);
+                  set('mdp',this.inptMdp);
                   this.router.push('/tabs/accueil')
                 }
                 else{
@@ -93,6 +97,29 @@ export default  {
   setup(){
     const router = useRouter();
     return {router};
+  },
+
+  async mounted(){
+    const login = await get('login');
+    const mdp = await get('mdp');
+    if(login!=null && mdp!=null){
+      console.log(login);
+      console.log(mdp);
+      // eslint-disable-next-line no-useless-catch
+      try{
+        const addr = getCheckCred(login,mdp);
+        const valid = await (await axios.get(addr)).data;
+        if(valid){
+          this.router.push('/tabs/accueil')
+        }
+        else{
+          this.wrongCred = true;
+        }
+      }
+      catch(err){
+          throw err;
+      }
+    }
   }
 }
 </script>

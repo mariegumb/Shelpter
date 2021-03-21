@@ -12,6 +12,7 @@
 import { IonPage, IonContent, IonTitle } from '@ionic/vue';
 import Header from '@/components/Header';
 import axios from 'axios';
+import { getUsers } from '@/composables/mongoApi';
 
 export default {
     name:"Notifications",
@@ -24,7 +25,7 @@ export default {
     methods:{
         async getUsers(){
             try{
-                this.users = await (await axios.get('http://localhost:3000/users')).data;
+                this.users = await (await axios.get(getUsers())).data;
             }
             catch(err){
                 console.log(err);
