@@ -103,8 +103,6 @@ export default  {
     const login = await get('login');
     const mdp = await get('mdp');
     if(login!=null && mdp!=null){
-      console.log(login);
-      console.log(mdp);
       // eslint-disable-next-line no-useless-catch
       try{
         const addr = getCheckCred(login,mdp);

@@ -16,7 +16,7 @@
             <ion-label style="color:grey" posistion="stacked">Color</ion-label>
             <ion-select v-model="this.color" ok-text="Choose" cancel-text="Cancel">
                 <ion-select-option value="bg-red-500">Red</ion-select-option>
-                <ion-select-option value="bg-purple-500">Puple</ion-select-option>
+                <ion-select-option value="bg-purple-500">Purple</ion-select-option>
                 <ion-select-option value="bg-blue-500">Blue</ion-select-option>
                 <ion-select-option value="bg-pink-500">Pink</ion-select-option>
                 <ion-select-option value="bg-orange-500">Orange</ion-select-option>

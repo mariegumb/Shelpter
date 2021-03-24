@@ -54,7 +54,8 @@ export default {
       }
       else if(result.data === "delete"){
         const alerts = await get('alerts');
-        alerts.pop(alerts[this.index]);
+        console.log(this.index)
+        alerts.splice(this.index,1);
         set('alerts',alerts);
         this.refresh();
       }

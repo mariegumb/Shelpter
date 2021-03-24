@@ -3,11 +3,6 @@
         <Header/>
         <ion-content :fullScreen="true">
             <div>
-              <ion-button  @click="getLocation" color="purple">Voir ma localisation</ion-button>
-              <!--<div v-if="loading">
-                <ion-progress-bar type="indeterminate" color="purple"></ion-progress-bar>
-                <p>Recuperation de la position...</p>
-              </div>-->
               <div v-if="coords">
                 <p class="pl-3 pt-2">longitude: {{coords.longitude}}</p>
                 <p class="pl-3">latitude: {{coords.latitude}}</p>
@@ -16,34 +11,35 @@
 
             <div id="map" style="height:400px"></div>
 
-            <ion-button @click="sendPos" color="purple">Envoyer sa position</ion-button>
+            <ion-button @click="centerMap" color="purple">Recentrer la carte</ion-button>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonContent, /*IonProgressBar,*/ IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import Header from '@/components/Header';
 import { Plugins } from '@capacitor/core';
 import { socket } from '@/composables/useSocket'
-import { Map, tileLayer, marker, icon } from 'leaflet';
+import { Map, tileLayer, marker } from 'leaflet';
+import { defineComponent } from 'vue';
 const { Geolocation } = Plugins;
 
-export default {
+export default defineComponent({
     name:"Map",
-    components: {IonPage, IonContent, Header, /*IonProgressBar,*/ IonButton },
+    components: {IonPage, IonContent, Header, IonButton },
     data(){
       return {
         coords: null,
-        loading: false,
         map: null,
         myPos: null,
-        users: []
+        users: [],
+        watch: null
       }
     },
     methods:{
-      getLocation(){
-        const watch = Geolocation.watchPosition({enableHighAccuracy: true}, (data,err) => {
+      followLocation(){
+        this.watch = Geolocation.watchPosition({enableHighAccuracy: true}, (data,err) => {
           if(err){
             throw err;
           }
@@ -64,9 +60,11 @@ export default {
           }
           Geolocation.clearWatch({id: getPos});
           console.log(data);
+          this.coords = data.coords;
           this.myPos = marker([data.coords.latitude,data.coords.longitude]);
           this.myPos.addTo(this.map);
           this.map.setView([data.coords.latitude,data.coords.longitude], 15);
+          //this.followLocation();
         })
       },
 
@@ -80,27 +78,41 @@ export default {
         this.initPosMap();
       },
 
-      async sendPos(){
+      /*async sendPos(){
         console.log('searching');
         const position = await Geolocation.getCurrentPosition({enableHighAccuracy: true});
         console.log('founded');
         const location = position.coords;
         socket.emit('sendPos',location.latitude,location.longitude);
-      }
+      },*/
 
+      centerMap(){
+        this.map.setView([this.coords.latitude,this.coords.longitude]);
+      },
+
+      ionViewWillLeave(){
+        if(this.watch != null){
+          Geolocation.clearWatch({id: this.watch});
+        }
+      },
+
+      ionViewDidEnter(){
+        this.followLocation();
+      }
     },
 
     mounted(){
       this.initMap();
-      socket.on('receivePos',(id,lat,long)=>{
+      socket.on('receivePos',(id,login,lat,long)=>{
         console.log("receive : "+lat+" "+long);
         marker([lat,long]).addTo(this.map)
       });
       this.map.invalidateSize();
+      //this.followLocation();
     },
 
     updated(){
       this.map.invalidateSize();
     }
-}
+})
 </script>

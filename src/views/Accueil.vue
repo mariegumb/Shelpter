@@ -20,6 +20,7 @@ import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
 import {get} from '@/composables/storage'
 import { emitter } from '@/emitter';
+import { socket } from '@/composables/useSocket'
 
 export default  {
   name: 'Accueil',
@@ -29,7 +30,9 @@ export default  {
       alerts: []
     }
   },
-  created(){
+  async created(){
+    const login = await get('login');
+    socket.emit('login',login);
     this.fetchAlerts()
   },
   updated(){
