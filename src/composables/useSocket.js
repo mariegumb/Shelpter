@@ -8,5 +8,5 @@ socket.on('welcome',(args)=>{
 });
 
 socket.on('getPosition',(id,long,lat)=>{
-    console.log(id+' : '+long+','+lat);
+    console.log(id+' moved : '+long+','+lat);
 });

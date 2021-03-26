@@ -21,13 +21,15 @@ import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import Header from '@/components/Header';
 import { Plugins } from '@capacitor/core';
 import { socket } from '@/composables/useSocket'
-import { Map, tileLayer, marker } from 'leaflet';
+import { Map, tileLayer, marker, icon, popup } from 'leaflet';
 import { defineComponent } from 'vue';
+import { get, remove } from '@/composables/storage'
 const { Geolocation } = Plugins;
 
 export default defineComponent({
     name:"Map",
     components: {IonPage, IonContent, Header, IonButton },
+    props: ['long','lat'],
     data(){
       return {
         coords: null,
@@ -48,7 +50,7 @@ export default defineComponent({
           this.coords = data.coords
 
           this.map.removeLayer(this.myPos);
-          this.myPos = marker([data.coords.latitude,data.coords.longitude]);
+          this.myPos = this.getMyMarker(data.coords.latitude,data.coords.longitude);
           this.map.addLayer(this.myPos);
         });
       },
@@ -61,16 +63,16 @@ export default defineComponent({
           Geolocation.clearWatch({id: getPos});
           console.log(data);
           this.coords = data.coords;
-          this.myPos = marker([data.coords.latitude,data.coords.longitude]);
+          this.myPos = this.getMyMarker(data.coords.latitude,data.coords.longitude);
           this.myPos.addTo(this.map);
           this.map.setView([data.coords.latitude,data.coords.longitude], 15);
-          //this.followLocation();
         })
       },
 
       initMap(){
         const location = { latitude: 46.866573725968756, longitude: 2.673486775390641}
         const zoom = 5;
+        console.log()
         this.map = new Map('map').setView([location.latitude,location.longitude], zoom);
         tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -96,23 +98,50 @@ export default defineComponent({
         }
       },
 
-      ionViewDidEnter(){
+      async ionViewDidEnter(){
         this.followLocation();
+        const alert = await get('help');
+        if(alert != null){
+          console.log('helping '+alert.user+' '+alert.lat+' '+alert.long);
+          await remove('help');
+          this.map.setView([alert.lat,alert.long]);
+          this.getMarkerHelp(alert.lat,alert.long)
+          .bindPopup(popup()
+          .setContent(alert.user+' is here'))
+          .openPopup()
+          .addTo(this.map);
+        }
+      },
+
+      getMyMarker(lat,long){
+        const myIcon = icon({
+          iconUrl: 'assets/icon/marker_person_map.png',
+          iconSize: [50,50],
+          iconAnchor: [25,50]
+        });
+        return marker([lat,long],{icon: myIcon})
+      },
+
+      getMarkerHelp(lat,long){
+        const myIcon = icon({
+          iconUrl: 'assets/icon/marker_help_map.png',
+          iconSize: [50,50],
+          iconAnchor: [25,50],
+          popupAnchor: [0,-25]
+        });
+        return marker([lat,long],{icon: myIcon})
       }
     },
 
-    mounted(){
-      this.initMap();
-      socket.on('receivePos',(id,login,lat,long)=>{
-        console.log("receive : "+lat+" "+long);
-        marker([lat,long]).addTo(this.map)
-      });
+    async mounted(){
+      await this.initMap();
       this.map.invalidateSize();
-      //this.followLocation();
     },
 
     updated(){
-      this.map.invalidateSize();
+      if(this.map != null){
+        this.map.invalidateSize();
+      }
     }
 })
 </script>

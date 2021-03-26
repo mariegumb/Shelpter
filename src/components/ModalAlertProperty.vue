@@ -31,6 +31,10 @@
             <ion-label style="color:grey" posistion="stacked">Share position on map</ion-label>
             <ion-toggle v-model="this.map"/>
         </ion-item>
+        <ion-item>
+            <ion-label style="color:grey" position="stacked">Custom message</ion-label>
+            <ion-textarea v-model="this.message"></ion-textarea>
+        </ion-item>
         <div style="display:flex;justify-content:center;">
             <ion-button @click="onCancel" color="light">Cancel</ion-button>
             <ion-button @click="onApply">Apply</ion-button>
@@ -40,7 +44,7 @@
 
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonToggle, IonLabel,
- IonItem, IonInput, IonSelect, IonSelectOption, modalController } from '@ionic/vue';
+ IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea } from '@ionic/vue';
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -50,7 +54,7 @@ export default defineComponent({
         alert: {default: null}
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton, IonToggle, IonItem,
-    IonLabel, IonInput, IonSelect, IonSelectOption},
+    IonLabel, IonInput, IonSelect, IonSelectOption, IonTextarea },
     data(){
         return{
             content: 'Content',
@@ -58,7 +62,8 @@ export default defineComponent({
             name: '',
             color: 'bg-red-500',
             tel: false,
-            map: false
+            map: false,
+            message: "Your message here"
         }
     },
     beforeMount(){
@@ -71,16 +76,17 @@ export default defineComponent({
                 this.color = this.alert.color;
                 this.tel = this.alert.tel;
                 this.map = this.alert.map;
+                this.message = this.alert.message;
             }
         },
         onCancel(){
             this.onDismiss("cancel")
         },
         onApply(){
-            this.onDismiss({name:this.name, color:this.color, tel:this.tel, map:this.map})
+            this.onDismiss({name:this.name, color:this.color, tel:this.tel, map:this.map, message: this.message})
         },
         onDismiss(result){
-            console.log({name:this.name, color:this.color, tel:this.tel, map:this.map});
+            //console.log({name:this.name, color:this.color, tel:this.tel, map:this.map});
             modalController.dismiss(result);
         },
         deleteAlert(){
