@@ -1,25 +1,16 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-          <ion-title >Login</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large" class="text-purple-600 text-center pt-2">
-            <span>S</span>
-            <span class="underline">HELP</span>
-            <span>TER</span>
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <ion-page> 
+    <Header/>
+    <ion-content>
+      <div id="background-image"></div>
+      <div class="logo">
+        <ion-icon color="light" name="contact"></ion-icon>
+      </div>
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>Connexion</ion-card-subtitle>
           <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
-        </ion-card-header>
+      </ion-card-header>
 
         <ion-card-content>
           <ion-item class="ion-no-padding">
@@ -40,6 +31,19 @@
             <div class="mt-4 text-right">
               <ion-button @click="checkCredentials" expand="block" color="purple">Se connecter</ion-button>
             </div>
+          <ion-item lines="none">
+            <ion-label color="purpledark text-center">Ou connectez-vous avec</ion-label>
+          </ion-item>
+            <div class="flex">
+              <ion-button color="facebook" shape="round">
+                <ion-icon name="logo-facebook"></ion-icon>
+                Facebook
+              </ion-button>
+              <ion-button color="google" shape="round">
+                <ion-icon name="logo-google"></ion-icon>
+                Google
+              </ion-button>
+            </div>
           </div>
         </ion-card-content>
       </ion-card>
@@ -48,17 +52,19 @@
 </template>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput,
- IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
+import { IonPage, IonContent, IonInput,
+ IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { getCheckCred } from '@/composables/mongoApi';
 import { get, set } from '@/composables/storage';
+import Header from '@/components/Header';
+
 
 export default  {
   name: 'Login',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput,
-   IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel},
+  components: { IonContent, IonPage, IonInput,
+   IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel, Header},
 
   data(){
     return{
@@ -133,6 +139,26 @@ export default  {
   --ion-color-tint: #6b46c1;
 }
 
+#background-image{
+  background-image: url("../../public/assets/image/rue.jpg") ;
+}
+
+.logo {
+    position: relative;
+    height: 250px;
+}
+
+.logo ion-icon{
+    font-size: 9em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
 
 .ion-color-purpledark {
   --ion-color-base: #553c9a;
@@ -143,4 +169,20 @@ export default  {
   --ion-color-tint: #553c9a;
 }
 
+.ion-color-facebook {
+  --ion-color-base: var(--ion-color-facebook) !important;
+  --ion-color-base-rgb: var(--ion-color-facebook-rgb) !important;
+  --ion-color-contrast: var(--ion-color-facebook-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-facebook-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-facebook-shade) !important;
+  --ion-color-tint: var(--ion-color-facebook-tint) !important;
+}
+.ion-color-google {
+  --ion-color-base: var(--ion-color-google) !important;
+  --ion-color-base-rgb: var(--ion-color-google-rgb) !important;
+  --ion-color-contrast: var(--ion-color-google-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-google-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-google-shade) !important;
+  --ion-color-tint: var(--ion-color-google-tint) !important;
+}
 </style>
