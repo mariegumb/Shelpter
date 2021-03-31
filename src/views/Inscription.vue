@@ -9,40 +9,48 @@
           </ion-title>
       </ion-toolbar>
     </ion-header>
+
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large" class="text-purple-600 text-center">Inscription</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-card>
-
-        <ion-card-content>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="nom" class="pl-0" placeholder="Nom"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="prenom" class="pl-0" placeholder="Prénom"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="login" class="pl-0" placeholder="Login"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="mail" class="pl-0" placeholder="Mail"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="mdp" placeholder="Mot de passe" type="password"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="confirm" placeholder="Confirmation mot de passe" type="password"></ion-input>
-          </ion-item>
-          <div v-if="error">
-            <ion-label>{{errorMsg}}</ion-label>
-          </div>
-          <ion-button @click="register" color="purple" >S'inscrire</ion-button>
-        </ion-card-content>
-
-      </ion-card>
+      <div class="background-image">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large" class="text-purple-600 text-center">Inscription</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-card style="margin-top:100px;">
+          <ion-card-content>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="nom" class="pl-0" placeholder="Nom"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="prenom" class="pl-0" placeholder="Prénom"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="login" class="pl-0" placeholder="Login"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="mail" class="pl-0" placeholder="Mail"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="mdp" placeholder="Mot de passe" type="password"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="confirm" placeholder="Confirmation mot de passe" type="password"></ion-input>
+            </ion-item>
+            <div v-if="error">
+              <ion-label>{{errorMsg}}</ion-label>
+            </div>
+            <ion-button @click="register" color="purple" >S'inscrire</ion-button>
+          </ion-card-content>
+          <div class="mt-4 p-2">
+            <router-link to="/login">
+              <div class="text-right" >
+                <span class="text-purple-6git00">Déjà un compte ?</span>
+              </div>
+            </router-link>
+          </div>  
+        </ion-card>
+      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -124,6 +132,17 @@ export default  {
   --ion-color-contrast-rgb: 0,0,0;
   --ion-color-shade: #6b46c1;
   --ion-color-tint: #6b46c1;
+}
+
+.background-image{
+  background-image: url("../../public/assets/image/rue.jpg") ;
+  background-size: cover;
+  height: 1000px;
+}
+
+
+.ion-card-content{
+  margin-top: 100px;
 }
 
 </style>

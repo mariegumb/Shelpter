@@ -1,54 +1,55 @@
 <template>
   <ion-page> 
-    <Header/>
     <ion-content>
-      <div id="background-image"></div>
-      <div class="logo">
-        <ion-icon color="light" name="contact"></ion-icon>
-      </div>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-subtitle>Connexion</ion-card-subtitle>
-          <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
-      </ion-card-header>
+      <div class="background-image">
+        <div class="logo">
+          <img src="Logo-ecrit">
+        </div>
+        <ion-card style="margin-top:55px;">
+          <ion-card-header>
+            <ion-card-subtitle>Connexion</ion-card-subtitle>
+            <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
+          </ion-card-header>
 
-        <ion-card-content>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="inptLogin" class="pl-0" placeholder="Mail ou Login"></ion-input>
-          </ion-item>
-          <ion-item class="ion-no-padding">
-            <ion-input v-model="inptMdp" placeholder="Mot de passe" type="password"></ion-input>
-          </ion-item>
-          <div v-if="wrongCred">
-            <ion-label >Wrong credentials</ion-label>
-          </div>
-          <div class="mt-4 p-2">
-            <router-link to="/inscription">
-              <div class="text-right" >
-                <span class="text-purple-6git00">Pas encore de compte ?</span>
+          <ion-card-content>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="inptLogin" class="pl-0" placeholder="Mail ou Login"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-input v-model="inptMdp" placeholder="Mot de passe" type="password"></ion-input>
+            </ion-item>
+            <div v-if="wrongCred">
+              <ion-label >Wrong credentials</ion-label>
+            </div>
+            <div class="mt-4 p-2">
+              <router-link to="/inscription">
+                <div class="text-right" >
+                  <span class="text-purple-6git00">Pas encore de compte ?</span>
+                </div>
+              </router-link>
+              <div class="mt-4 text-right">
+                <ion-button @click="checkCredentials" expand="block" color="purple">Se connecter</ion-button>
               </div>
-            </router-link>
-            <div class="mt-4 text-right">
-              <ion-button @click="checkCredentials" expand="block" color="purple">Se connecter</ion-button>
+            <ion-item lines="none">
+              <ion-label color="purpledark text-center">Ou connectez-vous avec</ion-label>
+            </ion-item>
+              <div class="flex">
+                <ion-button color="facebook" shape="round">
+                  <ion-icon name="logo-facebook"></ion-icon>
+                  Facebook
+                </ion-button>
+                <ion-button color="google" shape="round">
+                  <ion-icon name="logo-google"></ion-icon>
+                  Google
+                </ion-button>
+              </div>
             </div>
-          <ion-item lines="none">
-            <ion-label color="purpledark text-center">Ou connectez-vous avec</ion-label>
-          </ion-item>
-            <div class="flex">
-              <ion-button color="facebook" shape="round">
-                <ion-icon name="logo-facebook"></ion-icon>
-                Facebook
-              </ion-button>
-              <ion-button color="google" shape="round">
-                <ion-icon name="logo-google"></ion-icon>
-                Google
-              </ion-button>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
+      </div>       
     </ion-content>
   </ion-page>
+  
 </template>
 
 <script>
@@ -58,13 +59,12 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { getCheckCred } from '@/composables/mongoApi';
 import { get, set } from '@/composables/storage';
-import Header from '@/components/Header';
 
 
 export default  {
   name: 'Login',
   components: { IonContent, IonPage, IonInput,
-   IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel, Header},
+   IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel},
 
   data(){
     return{
@@ -139,13 +139,16 @@ export default  {
   --ion-color-tint: #6b46c1;
 }
 
-#background-image{
+.background-image{
   background-image: url("../../public/assets/image/rue.jpg") ;
+  background-size: cover;
+  height: 1000px;
 }
 
+
 .logo {
-    position: relative;
     height: 250px;
+    position: center;
 }
 
 .logo ion-icon{
