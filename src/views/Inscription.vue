@@ -5,7 +5,7 @@
         <div class="logo">
           <img src="../../public/assets/image/Logo-ecrit.jpg" class="position-logo">
         </div>
-        <ion-card class="m-5">
+        <ion-card class="m-3">
           <ion-card-header>
             <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
           </ion-card-header>
@@ -25,21 +25,37 @@
             <ion-item class="ion-no-padding">
               <ion-input v-model="mdp" placeholder="Mot de passe" type="password"></ion-input>
             </ion-item>
+          
             <ion-item class="ion-no-padding">
               <ion-input v-model="confirm" placeholder="Confirmation mot de passe" type="password"></ion-input>
             </ion-item>
             <div v-if="error">
               <ion-label>{{errorMsg}}</ion-label>
             </div>
-            <ion-button @click="register" color="purple" >S'inscrire</ion-button>
-          </ion-card-content>
-          <div class="mt-4 p-2">
-            <router-link to="/login">
+             <div class="mt-8 flex justify-between items-center">
+               <div>Carte d'identité : </div>
+              <form action="http://localhost:3000/upload" method="post" enctype="multipart/form-data">
+                <label for="pdf" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Carte d'identité</label>
+                <input class="hidden" id="pdf" type="file" name="photo" />
+              </form>
+             </div>
+             <div class="mt-6 flex justify-between items-center">
+              <div>Photo : </div>
+              <div>
+                <label for="picture" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Appareil photo</label>
+                <input class="hidden" id="picture" type="file" accept="image/*" capture="camera" />
+              </div>
+            </div>
+            <div class="text-right mt-8">
+              <ion-button @click="register" color="purple" >S'inscrire</ion-button>
+              <router-link to="/login">
               <div class="text-right" >
                 <span class="text-purple-6git00">Déjà un compte ?</span>
               </div>
             </router-link>
-          </div>  
+            </div>
+            
+          </ion-card-content>
         </ion-card>
       </div>
     </ion-content>

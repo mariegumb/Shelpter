@@ -41,6 +41,7 @@
             </div>
           </div>
           <ion-button  @click="deconnect" color="purple">Déconnexion</ion-button>
+          
         </ion-content>
     </ion-page>
 </template>
@@ -51,6 +52,8 @@ import Header from '@/components/Header';
 import {brushOutline} from "ionicons/icons";
 import { remove } from '@/composables/storage';
 import { useRouter } from 'vue-router';
+
+import {addNewToGallery} from '../services/camera'
 
 
 
@@ -63,6 +66,9 @@ export default {
       brushOutline,
       router
     };
+  },
+  created(){
+    addNewToGallery()
   },
 
   methods:{

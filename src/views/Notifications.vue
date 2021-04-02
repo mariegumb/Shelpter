@@ -3,14 +3,17 @@
         <Header/>
         <ion-content :fullScreen="true">
             <div v-for="alert in alerts" v-bind:key="alert.id">
-                <div className="btnAlert" v-if="alert.user != this.user">
-                    <div className="status1" v-if="alert.status === 1" @click="clickAlert(alert)">
-                        <div>{{alert.user}} need some help</div>
-                        <div>{{alert.message}}</div>
+                <div className="m-2" v-if="alert.user != this.user">
+                    <!-- status 1 : alerte en cours -->
+                    <div class="p-3 w-full rounded-lg bg-red-300 text-red-900 text-center" v-if="alert.status === 1" @click="clickAlert(alert)">
+                        <div class="font-bold">{{alert.user}} a besoin d'aide !</div>
+                        <div class="italic">"{{alert.message}}"</div>
                     </div>
-                    <div className="status2" v-if="alert.status === 2">
-                        <div>{{alert.user}} need some help</div>
-                        <div>{{alert.message}}</div>
+                    <!-- status 2 : alerte passee pour garder une trace -->
+                    <div class="p-3 w-full rounded-lg bg-gray-300 text-gray-700 text-center" v-if="alert.status === 2">
+                        <div class="italic mb-2 text-md">Alerte terminée</div>
+                        <div class="text-xs">{{alert.user}} a besoin d'aide</div>
+                        <div class="text-xs italic">"{{alert.message}}"</div>
                     </div>
                 </div>
             </div>
@@ -50,7 +53,8 @@ export default {
         async getAlerts(){
             try{
                 this.alerts = await (await axios.get(getAddAlertUrl())).data;
-                this.alerts.push({user: 'test', message: 'test', status: 2})
+                this.alerts.push({user: 'John Travolta', message: 'On me suit', status: 1})
+                this.alerts.push({user: 'Pablo Picasso', message: 'Un voleur est parti avec mes peinture', status: 2})
             }
             catch(err){
                 console.log(err);
@@ -87,18 +91,6 @@ export default {
     text-align: center;
     margin: 10px;
     box-shadow: 1px 1px grey;
-    border-radius: 10px;
-}
-
-.status1{
-    background-color: #d9b5e6;
-    width:100%;
-    border-radius: 10px;
-}
-
-.status2{
-    background-color: #b5e6c5;
-    width: 100%;
     border-radius: 10px;
 }
 </style>
