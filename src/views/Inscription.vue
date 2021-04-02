@@ -1,24 +1,15 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-          <ion-title size="large" class="text-purple-600 text-center pt-2">
-            <span>S</span>
-            <span class="underline">HELP</span>
-            <span>TER</span>
-          </ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
+    <ion-content>
       <div class="background-image">
-        <ion-header collapse="condense">
-          <ion-toolbar>
-            <ion-title size="large" class="text-purple-600 text-center">Inscription</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-card style="margin-top:100px;">
-          <ion-card-content>
+        <div class="logo">
+          <img src="../../public/assets/image/Logo-ecrit.jpg" class="position-logo">
+        </div>
+        <ion-card class="m-5">
+          <ion-card-header>
+            <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="m-2 my-5">
             <ion-item class="ion-no-padding">
               <ion-input v-model="nom" class="pl-0" placeholder="Nom"></ion-input>
             </ion-item>
@@ -56,7 +47,7 @@
 </template>
 
 <script>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
+import { IonPage, IonContent,
  IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
@@ -64,7 +55,7 @@ import { postUser } from '@/composables/mongoApi';
 
 export default  {
   name: 'Inscription',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent,
+  components: { IonContent,
    IonPage, IonItem, IonButton, IonInput, IonCardContent, IonCard, IonLabel},
   
   data(){
@@ -140,9 +131,14 @@ export default  {
   height: 1000px;
 }
 
-
-.ion-card-content{
-  margin-top: 100px;
+.logo {
+    height: 200px;
+    position: center;
 }
 
+.position-logo{
+  height: 200px;
+  margin-left: 80px;
+  border-radius: 100px;
+}
 </style>

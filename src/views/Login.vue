@@ -3,9 +3,9 @@
     <ion-content>
       <div class="background-image">
         <div class="logo">
-          <img src="Logo-ecrit">
+          <img src="../../public/assets/image/Logo-ecrit.jpg" class="position-logo">
         </div>
-        <ion-card style="margin-top:55px;">
+        <ion-card class="m-5 my-5">
           <ion-card-header>
             <ion-card-subtitle>Connexion</ion-card-subtitle>
             <ion-card-title color="purpledark">Vos Identifiants</ion-card-title>
@@ -29,19 +29,6 @@
               </router-link>
               <div class="mt-4 text-right">
                 <ion-button @click="checkCredentials" expand="block" color="purple">Se connecter</ion-button>
-              </div>
-            <ion-item lines="none">
-              <ion-label color="purpledark text-center">Ou connectez-vous avec</ion-label>
-            </ion-item>
-              <div class="flex">
-                <ion-button color="facebook" shape="round">
-                  <ion-icon name="logo-facebook"></ion-icon>
-                  Facebook
-                </ion-button>
-                <ion-button color="google" shape="round">
-                  <ion-icon name="logo-google"></ion-icon>
-                  Google
-                </ion-button>
               </div>
             </div>
           </ion-card-content>
@@ -151,16 +138,10 @@ export default  {
     position: center;
 }
 
-.logo ion-icon{
-    font-size: 9em;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.flex {
-    display: flex;
-    justify-content: space-between;
+.position-logo{
+  height: 200px;
+  margin-left: 80px;
+  border-radius: 100px;
 }
 
 .ion-color-purpledark {
@@ -170,22 +151,5 @@ export default  {
   --ion-color-contrast-rgb: 0,0,0;
   --ion-color-shade: #553c9a;
   --ion-color-tint: #553c9a;
-}
-
-.ion-color-facebook {
-  --ion-color-base: var(--ion-color-facebook) !important;
-  --ion-color-base-rgb: var(--ion-color-facebook-rgb) !important;
-  --ion-color-contrast: var(--ion-color-facebook-contrast) !important;
-  --ion-color-contrast-rgb: var(--ion-color-facebook-contrast-rgb) !important;
-  --ion-color-shade: var(--ion-color-facebook-shade) !important;
-  --ion-color-tint: var(--ion-color-facebook-tint) !important;
-}
-.ion-color-google {
-  --ion-color-base: var(--ion-color-google) !important;
-  --ion-color-base-rgb: var(--ion-color-google-rgb) !important;
-  --ion-color-contrast: var(--ion-color-google-contrast) !important;
-  --ion-color-contrast-rgb: var(--ion-color-google-contrast-rgb) !important;
-  --ion-color-shade: var(--ion-color-google-shade) !important;
-  --ion-color-tint: var(--ion-color-google-tint) !important;
 }
 </style>
