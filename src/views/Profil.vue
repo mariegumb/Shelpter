@@ -41,19 +41,23 @@
             </div>
           </div>
           <ion-button  @click="deconnect" color="purple">Déconnexion</ion-button>
+          <ion-button  @click="openSettings" color="purple">Modifier le profil</ion-button>
+          <ion-button  @click="openDonation" color="purple">Faire un don</ion-button>
           
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, modalController } from '@ionic/vue';
 import Header from '@/components/Header';
 import {brushOutline} from "ionicons/icons";
 import { remove } from '@/composables/storage';
 import { useRouter } from 'vue-router';
 
 import {addNewToGallery} from '../services/camera'
+import ModalProfilSettings from '@/components/ModalProfilSettings.vue';
+import ModalDonation from '@/components/ModalDonation.vue';
 
 
 
@@ -76,7 +80,54 @@ export default {
       await remove('login');
       await remove('mdp');
       this.router.go('/login')
-    }
+    },
+
+    async openSettings(){
+      const modal = await modalController.create({
+        component: ModalProfilSettings,
+        componentProps:{
+          title: 'Modifier le profil'
+        }
+      });
+
+      await modal.present();
+
+      const result = await modal.onDidDismiss();
+      this.closedModalSettingsHandler(result);
+    },
+
+    closedModalSettingsHandler(result){
+      if(result.data === "cancel"){
+        console.log("cancelled");
+      }
+      else{
+        console.log(result)
+      }
+    },
+
+    async openDonation(){
+      const modal = await modalController.create({
+        component: ModalDonation,
+        componentProps:{
+          title: 'Donation'
+        }
+      });
+
+      await modal.present();
+
+      const result = await modal.onDidDismiss();
+      this.closedModalDonationHandler(result);
+    },
+
+    closedModalDonationHandler(result){
+      if(result.data === "cancel"){
+        console.log("cancelled");
+      }
+      else{
+        console.log(result)
+      }
+    },
+
   }
 }
 </script>
