@@ -74,7 +74,7 @@
               <span>Caroline</span>
             </div>
           </div>
-          <ion-button @click="deconnect" color="purple" class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-purple-600 hover:bg-purple-50">Déconnexion</ion-button>         
+          <ion-button @click="deconnect" color="purple-600" class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-purple-600 hover:bg-purple-50">Déconnexion</ion-button>         
         </ion-content>
     </ion-page>
 </template>
