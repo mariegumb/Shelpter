@@ -52,7 +52,6 @@ export default {
         async getAlerts(){
             try{
                 this.alerts = await getAllAlerts();
-                console.log(await getAllAlerts());
                 this.alerts.push({user: 'John Travolta', message: 'On me suit', status: 1})
                 this.alerts.push({user: 'Pablo Picasso', message: 'Un voleur est parti avec mes peinture', status: 2})
             }
@@ -76,11 +75,11 @@ export default {
         }
     },
     async created(){
-        this.getAlerts();
+        await this.getAlerts();
         this.user = await get('login');
     },
-    updated(){
-        this.getAlerts();
+    async updated(){
+        await this.getAlerts();
     }
 }
 </script>
