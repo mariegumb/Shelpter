@@ -13,8 +13,7 @@ import { emitter } from './emitter'
 import FakeCall from './components/fakeCall.vue';
 import { Plugins } from '@capacitor/core';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import axios from 'axios';
-import { getAddAlertUrl } from '@/composables/mongoApi';
+import { throwAlert } from '@/composables/mongoApi';
 import { get } from '@/composables/storage'
 const { Geolocation } = Plugins;
 
@@ -49,7 +48,7 @@ export default defineComponent({
       const user = await get('login');
       const body = {user: user, message: alert.message, lat: location.latitude, long: location.longitude};
       console.log(body);
-      await axios.post(getAddAlertUrl(),body)
+      await throwAlert(body);
     }
 
     emitter.on('alert', (alert) => {

@@ -26,8 +26,7 @@
 <script>
 import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import Header from '@/components/Header';
-import axios from 'axios';
-import { getAddAlertUrl } from '@/composables/mongoApi';
+import { getAllAlerts } from '@/composables/mongoApi';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { get, set } from '@/composables/storage';
 import { useRouter } from 'vue-router';
@@ -52,7 +51,8 @@ export default {
     methods:{
         async getAlerts(){
             try{
-                this.alerts = await (await axios.get(getAddAlertUrl())).data;
+                this.alerts = await getAllAlerts();
+                console.log(await getAllAlerts());
                 this.alerts.push({user: 'John Travolta', message: 'On me suit', status: 1})
                 this.alerts.push({user: 'Pablo Picasso', message: 'Un voleur est parti avec mes peinture', status: 2})
             }

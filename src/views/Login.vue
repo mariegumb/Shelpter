@@ -43,8 +43,7 @@
 import { IonPage, IonContent, IonInput,
  IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
-import { getCheckCred } from '@/composables/mongoApi';
+import { checkCred } from '@/composables/mongoApi';
 import { get, set } from '@/composables/storage';
 
 
@@ -65,8 +64,7 @@ export default  {
         async checkCredentials(){
           if(this.inptLogin != "" && this.inptMdp != ""){
             try{
-                const addr = getCheckCred(this.inptLogin,this.inptMdp);
-                const valid = await (await axios.get(addr)).data;
+                const valid = await checkCred(this.inptLogin,this.inptMdp);
                 if(valid){
                   set('login',this.inptLogin);
                   set('mdp',this.inptMdp);
@@ -98,8 +96,7 @@ export default  {
     if(login!=null && mdp!=null){
       // eslint-disable-next-line no-useless-catch
       try{
-        const addr = getCheckCred(login,mdp);
-        const valid = await (await axios.get(addr)).data;
+        const valid = await checkCred(login,mdp);
         if(valid){
           this.router.push('/tabs/accueil')
         }

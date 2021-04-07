@@ -65,7 +65,6 @@
                   <span class="text-purple-6git00">Déjà un compte ?</span>
                 </div>
               </router-link>
-              <ion-button @click="sendFiles" color="purple">Send</ion-button>
             </div>
             
           </ion-card-content>
@@ -79,7 +78,6 @@
 import { IonPage, IonContent,
  IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import { storeNewUser, sendFilesToMongo } from '@/composables/mongoApi';
 
 export default  {
@@ -158,11 +156,6 @@ export default  {
       }
       else{
         this.filePhoto = null
-      }
-    },
-    async sendFiles(){
-      if(this.fileId !== null && this.filePhoto !== null){
-        await sendFilesToMongo(this.fileId,this.filePhoto)
       }
     }
   },
