@@ -34,25 +34,38 @@
             </div>
              <div class="mt-8 flex justify-between items-center">
                <div>Carte d'identité : </div>
-              <form action="http://localhost:3000/upload" method="post" enctype="multipart/form-data">
-                <label for="pdf" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Carte d'identité</label>
-                <input class="hidden" id="pdf" type="file" name="photo" />
-              </form>
+              <div>
+                <label @click="this.fileId=null" for="pdf" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Carte d'identité</label>
+                <input class="hidden" id="pdf" type="file" accept="image/*,.pdf" name="photo" @change="previewId" />
+                <div v-if="this.fileId===null">
+                  Aucun fichier selectionné
+                </div>
+                <div v-if="this.fileId!==null">
+                  {{this.fileId.name}}
+                </div>
+              </div>
              </div>
              <div class="mt-6 flex justify-between items-center">
               <div>Photo : </div>
               <div>
-                <label for="picture" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Appareil photo</label>
-                <input class="hidden" id="picture" type="file" accept="image/*" capture="camera" />
+                <label @click="this.filePhoto=null" for="picture" class="hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white py-1 px-2 rounded bg-purple-500 text-white">Appareil photo</label>
+                <input class="hidden" id="picture" type="file" accept="image/*" capture="camera" @change="previewPhoto"/>
+                <div v-if="this.filePhoto===null">
+                  Aucun fichier selectionné
+                </div>
+                <div v-if="this.filePhoto!==null">
+                  {{this.filePhoto.name}}
+                </div>
               </div>
             </div>
             <div class="text-right mt-8">
               <ion-button @click="register" color="purple" >S'inscrire</ion-button>
               <router-link to="/login">
-              <div class="text-right" >
-                <span class="text-purple-6git00">Déjà un compte ?</span>
-              </div>
-            </router-link>
+                <div class="text-right" >
+                  <span class="text-purple-6git00">Déjà un compte ?</span>
+                </div>
+              </router-link>
+              <ion-button @click="sendFiles" color="purple">Send</ion-button>
             </div>
             
           </ion-card-content>
@@ -67,7 +80,7 @@ import { IonPage, IonContent,
  IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { postUser } from '@/composables/mongoApi';
+import { storeNewUser, sendFilesToMongo } from '@/composables/mongoApi';
 
 export default  {
   name: 'Inscription',
@@ -83,7 +96,9 @@ export default  {
       mdp: "",
       confirm: "",
       error: false,
-      errorMsg: ""
+      errorMsg: "",
+      fileId: null,
+      filePhoto: null,
     }
   },
 
@@ -93,15 +108,24 @@ export default  {
       try{
         if(this.nom != "" && this.prenom != "" && this.login != "" && this.mail != "" && this.mdp != "" && this.confirm != ""){
           if(this.mdp == this.confirm){
-            const user = {
-              login: this.login,
-              mdp: this.mdp,
-              nom: this.nom,
-              prenom: this.prenom,
-              mail: this.mail
-            };
-            await axios.post(postUser(),user);
-            this.router.go(-1);
+            if(this.filePhoto !== null && this.fileId !== null){
+              const { fileIdId, filePhotoId } = await sendFilesToMongo(this.fileId, this.filePhoto);
+              const user = {
+                login: this.login,
+                mdp: this.mdp,
+                nom: this.nom,
+                prenom: this.prenom,
+                mail: this.mail,
+                fileId: fileIdId,
+                filePhoto: filePhotoId,
+              };
+              await storeNewUser(user);
+              this.router.go(-1);
+            }
+            else{
+              this.error = true;
+              this.errorMsg = "Veuillez joindre les fichiers demandés"
+            }
           }
           else{
             this.error = true;
@@ -116,6 +140,29 @@ export default  {
       catch(err){
         console.log(err);
         throw(err);
+      }
+    },
+    previewId(event){
+      if(event.target.files.length > 0 && event.target.files[0] !== null){
+        this.fileId = event.target.files[0]
+        console.log(this.fileId)
+      }
+      else{
+        this.fileId = null
+      }
+    },
+    previewPhoto(event){
+      if(event.target.files.length > 0 && event.target.files[0] !== null){
+        this.filePhoto = event.target.files[0]
+        console.log(this.filePhoto)
+      }
+      else{
+        this.filePhoto = null
+      }
+    },
+    async sendFiles(){
+      if(this.fileId !== null && this.filePhoto !== null){
+        await sendFilesToMongo(this.fileId,this.filePhoto)
       }
     }
   },
