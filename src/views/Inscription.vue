@@ -78,7 +78,7 @@
 import { IonPage, IonContent,
  IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import { storeNewUser, sendFilesToMongo } from '@/composables/mongoApi';
+import { storeNewUser, sendFilesToMongo, verifyLoginAvailable } from '@/composables/mongoApi';
 
 export default  {
   name: 'Inscription',
@@ -106,23 +106,29 @@ export default  {
       try{
         if(this.nom != "" && this.prenom != "" && this.login != "" && this.mail != "" && this.mdp != "" && this.confirm != ""){
           if(this.mdp == this.confirm){
-            if(this.filePhoto !== null && this.fileId !== null){
-              const { fileIdId, filePhotoId } = await sendFilesToMongo(this.fileId, this.filePhoto);
-              const user = {
-                login: this.login,
-                mdp: this.mdp,
-                nom: this.nom,
-                prenom: this.prenom,
-                mail: this.mail,
-                fileId: fileIdId,
-                filePhoto: filePhotoId,
-              };
-              await storeNewUser(user);
-              this.router.go(-1);
+            if(await verifyLoginAvailable(this.login)){
+              if(this.filePhoto !== null && this.fileId !== null){
+                const { fileIdId, filePhotoId } = await sendFilesToMongo(this.fileId, this.filePhoto);
+                const user = {
+                  login: this.login,
+                  mdp: this.mdp,
+                  nom: this.nom,
+                  prenom: this.prenom,
+                  mail: this.mail,
+                  fileId: fileIdId,
+                  filePhoto: filePhotoId,
+                };
+                await storeNewUser(user);
+                this.router.go(-1);
+              }
+              else{
+                this.error = true;
+                this.errorMsg = "Veuillez joindre les fichiers demandés";
+              }
             }
             else{
               this.error = true;
-              this.errorMsg = "Veuillez joindre les fichiers demandés"
+              this.errorMsg = "Desole ce login est deja pris";
             }
           }
           else{

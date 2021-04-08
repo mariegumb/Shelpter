@@ -24,17 +24,44 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey" posistion="stacked">Telephone</ion-label>
+            <ion-label style="color:grey">Telephone</ion-label>
             <ion-toggle v-model="this.tel"/>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey" posistion="stacked">Share position on map</ion-label>
+            <ion-label style="color:grey">Share position with users</ion-label>
             <ion-toggle v-model="this.map"/>
         </ion-item>
-        <ion-item>
+        <ion-item v-if="map">
             <ion-label style="color:grey" position="stacked">Custom message</ion-label>
             <ion-textarea v-model="this.message"></ion-textarea>
         </ion-item>
+        <ion-item>
+            <ion-label style="color:grey">Send a sms</ion-label>
+            <ion-toggle v-model="this.sendSms"/>
+        </ion-item>
+        <div v-if="sendSms">
+            <ion-item>
+                <ion-label style="color:grey">Share position in sms</ion-label>
+                <ion-toggle v-model="this.sendPosInSms"/>
+            </ion-item>
+            <ion-item>
+                <div>
+                    <ion-label style="color:grey">Choose contacts</ion-label>
+                    <ion-button color="primary">Add a contact</ion-button>
+                </div>
+                <div>
+                    <div v-for="contact in contacts" v-bind:key="contact.id">
+                        {{contact.name}} - {{contact.tel}}
+                    </div>
+                </div>
+            </ion-item>
+            <ion-item>
+                <ion-label style="color:grey" position="stacked">Custom your sms</ion-label>
+                <ion-textarea v-model="sms"></ion-textarea>
+            </ion-item>
+        </div>
+
+
         <div style="display:flex;justify-content:center;">
             <ion-button @click="onCancel" color="light">Cancel</ion-button>
             <ion-button @click="onApply">Apply</ion-button>
@@ -63,7 +90,11 @@ export default defineComponent({
             color: 'bg-red-500',
             tel: false,
             map: false,
-            message: "Your message here"
+            message: "Your message here",
+            sendSms: false,
+            sms: 'your custom sms here',
+            contacts: [{name: 'hugo', tel: '0679201212'},{name: 'loana', tel: '0679201212'}],
+            sendPosInSms: false,
         }
     },
     beforeMount(){

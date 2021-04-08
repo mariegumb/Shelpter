@@ -20,6 +20,10 @@ export const storeNewUser = async (user) => {
     return await axios.post(addr+'/users',user);
 }
 
+export const verifyLoginAvailable = async (login) => {
+    return (await (await axios.get(addr+'/users/'+login)).data).length < 1;
+}
+
 export const throwAlert = async (body) => {
     return await axios.post(addr+'/alerts',body);
 }
