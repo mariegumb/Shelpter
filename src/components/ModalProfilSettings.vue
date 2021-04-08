@@ -31,38 +31,43 @@
                     <div class="grid grid-cols-6 gap-6">
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="login" class="block text-sm font-medium text-gray-700">Login Name*</label>
-                            <input type="text" name="login" id="login" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="login" class="block text-sm font-medium text-purple-600">Login Name*</label>
+                            <input type="text" name="login" id="login" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Login" autocomplete="given-name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="first_name" class="block text-sm font-medium text-gray-700">Prenom*</label>
-                            <input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="first_name" class="block text-sm font-medium text-purple-600">Prenom*</label>
+                            <input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="First Name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="last_name" class="block text-sm font-medium text-gray-700">Nom*</label>
-                            <input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="last_name" class="block text-sm font-medium text-purple-600">Nom*</label>
+                            <input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Last Name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-4">
-                            <label for="email_address" class="block text-sm font-medium text-gray-700">Email*</label>
-                            <input type="text" name="email_address" id="email_address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="email_address" class="block text-sm font-medium text-purple-600">Email*</label>
+                            <input type="text" name="email_address" id="email_address" autocomplete="email" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Email">
                         </div>
 
                         <div class="col-span-6 sm:col-span-4">
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Telephone*</label>
-                            <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" name="phone" id="phone" autocomplete="phone" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="phone" class="block text-sm font-medium text-purple-600">Telephone*</label>
+                            <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" name="phone" id="phone" autocomplete="phone" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="+33">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="mdp" class="block text-sm font-medium text-gray-700">Mot de passe*</label>
-                            <input type="text" name="mdp" id="mdp" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="mdp" class="block text-sm font-medium text-purple-600">Mot de passe*</label>
+                            <input type="text" name="mdp" id="mdp" autocomplete="given-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="****">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="country" class="block text-sm font-medium text-gray-700">Country / Region</label>
-                            <select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <label for="mdp" class="block text-sm font-medium text-purple-600">Confirmation du mot de passe*</label>
+                            <input type="text" name="mdp" id="mdp" autocomplete="given-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="****">
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="country" class="block text-sm font-medium text-purple-600">Country / Region</label>
+                            <select id="country" name="country" autocomplete="country" class="mt-1 block w-full py-2 px-3 border border-purple-600 bg-purple-400 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option>France</option>
                             <option>Canada</option>
                             <option>United States</option>
@@ -70,23 +75,23 @@
                         </div>
 
                         <div class="col-span-6">
-                            <label for="street_address" class="block text-sm font-medium text-gray-700">Adress</label>
-                            <input type="text" name="street_address" id="street_address" autocomplete="street-address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="street_address" class="block text-sm font-medium text-purple-600">Adresse</label>
+                            <input type="text" name="street_address" id="street_address" autocomplete="street-address" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Adress">
                         </div>
 
                         <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                            <label for="city" class="block text-sm font-medium text-gray-700">Ville</label>
-                            <input type="text" name="city" id="city" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="city" class="block text-sm font-medium text-purple-600">Ville</label>
+                            <input type="text" name="city" id="city" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="City">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                            <label for="state" class="block text-sm font-medium text-gray-700">Département / State</label>
-                            <input type="text" name="state" id="state" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="state" class="block text-sm font-medium text-purple-600">Département / State</label>
+                            <input type="text" name="state" id="state" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="State">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                            <label for="postal_code" class="block text-sm font-medium text-gray-700">ZIP / Code Postal</label>
-                            <input type="text" name="postal_code" id="postal_code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <label for="postal_code" class="block text-sm font-medium text-purple-600">ZIP / Code Postal</label>
+                            <input type="text" name="postal_code" id="postal_code" autocomplete="postal-code" class="mt-1 mb-2 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Code Postal">
                         </div>
                     </div>
                     <div class="md:col-span-1">
