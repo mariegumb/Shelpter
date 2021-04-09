@@ -24,42 +24,60 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey">Telephone</ion-label>
+            <ion-label style="color:grey">Fake call</ion-label>
             <ion-toggle v-model="this.tel"/>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey">Share position with users</ion-label>
-            <ion-toggle v-model="this.map"/>
-        </ion-item>
-        <ion-item v-if="map">
-            <ion-label style="color:grey" position="stacked">Custom message</ion-label>
-            <ion-textarea v-model="this.message"></ion-textarea>
+            <div style="display:flex;flex-direction:column;width:100%">
+                <div style="display:flex;justify-content:space-between;margin:10px 0px">
+                    <ion-label style="color:grey">Share position with users</ion-label>
+                    <ion-toggle v-model="this.map"/>
+                </div>
+                <div v-if="map" style="width:100%">
+                    <ion-item>
+                        <ion-label style="color:grey" position="stacked">Custom message</ion-label>
+                        <ion-textarea v-model="this.message"></ion-textarea>
+                    </ion-item>
+                </div>
+            </div>
         </ion-item>
         <ion-item>
             <ion-label style="color:grey">Send a sms</ion-label>
             <ion-toggle v-model="this.sendSms"/>
         </ion-item>
-        <div v-if="sendSms">
-            <ion-item>
-                <ion-label style="color:grey">Share position in sms</ion-label>
-                <ion-toggle v-model="this.sendPosInSms"/>
-            </ion-item>
-            <ion-item>
-                <div>
-                    <ion-label style="color:grey">Choose contacts</ion-label>
-                    <ion-button color="primary">Add a contact</ion-button>
-                </div>
-                <div>
-                    <div v-for="contact in contacts" v-bind:key="contact.id">
-                        {{contact.name}} - {{contact.tel}}
+        <ion-item v-if="sendSms">
+            <div style="width:100%">
+                <ion-item>
+                    <div style="width:100%;display:flex;justify-content:space-between;margin:10px 0px">
+                        <ion-label style="color:grey">Share position in sms</ion-label>
+                        <ion-toggle v-model="this.sendPosInSms"/>
                     </div>
-                </div>
-            </ion-item>
-            <ion-item>
-                <ion-label style="color:grey" position="stacked">Custom your sms</ion-label>
-                <ion-textarea v-model="sms"></ion-textarea>
-            </ion-item>
-        </div>
+                </ion-item>
+                <ion-item>
+                    <div style="display:flex;flex-direction:column;width:100%;margin:10px 0px">
+                        <div style="display:flex;flex-direction:row;justify-content:space-between;width:100%;">
+                            <ion-label style="color:grey">Choose contacts</ion-label>
+                            <ion-button color="primary">Add a contact</ion-button>
+                        </div>
+                        <div style="display:flex;flex-direction:column;">
+                            <div v-for="contact in contacts" v-bind:key="contact.id" style="margin:5px;display:flex;justify-content:space-between;with:100%">
+                                    <div>{{contact.name}}</div>
+                                    <div>{{contact.tel}}</div>
+                                    <ion-button>X</ion-button>
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item>
+                    <ion-label style="color:grey" position="stacked">Custom your sms</ion-label>
+                    <ion-textarea v-model="sms"></ion-textarea>
+                </ion-item>
+            </div>
+        </ion-item>
+        <ion-item>
+            <ion-label style="color:grey">Record microphone</ion-label>
+            <ion-toggle v-model="this.recMic"/>
+        </ion-item>
 
 
         <div style="display:flex;justify-content:center;">
@@ -86,7 +104,7 @@ export default defineComponent({
         return{
             content: 'Content',
             
-            name: '',
+            name: 'alert',
             color: 'bg-red-500',
             tel: false,
             map: false,
@@ -95,6 +113,7 @@ export default defineComponent({
             sms: 'your custom sms here',
             contacts: [{name: 'hugo', tel: '0679201212'},{name: 'loana', tel: '0679201212'}],
             sendPosInSms: false,
+            recMic:false,
         }
     },
     beforeMount(){

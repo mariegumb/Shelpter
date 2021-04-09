@@ -3,8 +3,8 @@
         <Header/>
         <ion-content :fullScreen="true">
           <div class="w-full px-6 py-10 grid grid-rows-1 gap-5">
-            <div v-for="(pref, index) in prefs" v-bind:key="pref.name">
-              <button-alerte v-bind:alert="pref" v-bind:index="index" v-bind:refresh="this.getPrefs"></button-alerte>
+            <div v-for="(pref, index) in prefs" v-bind:key="pref">
+              <button-alerte v-if="pref!==null" v-bind:alert="pref" v-bind:index="index" v-bind:refresh="this.getPrefs"></button-alerte>
             </div>
             <button @click="newAlert" class="bg-gray-300 w-full h-20 rounded-full flex items-center justify-center text-4xl focus:outline-none">
               <ion-icon :icon="addOutline"></ion-icon>
@@ -61,7 +61,7 @@ export default {
       if(result.data === "cancel"){
         console.log("cancelled");
       }
-      else{
+      else if(result.data !== null){
         if(this.prefs){
           this.prefs.push(result.data)
         }  else {
