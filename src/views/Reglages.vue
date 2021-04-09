@@ -61,7 +61,7 @@ export default {
       if(result.data === "cancel"){
         console.log("cancelled");
       }
-      else if(result.data !== null){
+      else if(result && result.data !== null && result.data !== undefined){
         if(this.prefs){
           this.prefs.push(result.data)
         }  else {

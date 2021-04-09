@@ -57,13 +57,13 @@
                     <div style="display:flex;flex-direction:column;width:100%;margin:10px 0px">
                         <div style="display:flex;flex-direction:row;justify-content:space-between;width:100%;">
                             <ion-label style="color:grey">Choose contacts</ion-label>
-                            <ion-button color="primary">Add a contact</ion-button>
+                            <ion-button color="primary" @click="pickContact">Add a contact</ion-button>
                         </div>
                         <div style="display:flex;flex-direction:column;">
-                            <div v-for="contact in contacts" v-bind:key="contact.id" style="margin:5px;display:flex;justify-content:space-between;with:100%">
+                            <div v-for="(contact, i) in contactsSelected" v-bind:key="i" style="margin:5px;display:flex;justify-content:space-between;with:100%;align-items:center;">
                                     <div>{{contact.name}}</div>
                                     <div>{{contact.tel}}</div>
-                                    <ion-button>X</ion-button>
+                                    <ion-button @click="removeContact(i)">X</ion-button>
                             </div>
                         </div>
                     </div>
@@ -91,6 +91,7 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonToggle, IonLabel,
  IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea } from '@ionic/vue';
 import { defineComponent } from "vue";
+import { Contacts } from '@ionic-native/contacts';
 
 export default defineComponent({
     name: 'ModalAlertProperty',
@@ -111,9 +112,15 @@ export default defineComponent({
             message: "Your message here",
             sendSms: false,
             sms: 'your custom sms here',
-            contacts: [{name: 'hugo', tel: '0679201212'},{name: 'loana', tel: '0679201212'}],
+            contactsSelected: [],
             sendPosInSms: false,
             recMic:false,
+        }
+    },
+    setup(){
+        const contacts = new Contacts();
+        return {
+            contacts
         }
     },
     beforeMount(){
@@ -127,13 +134,29 @@ export default defineComponent({
                 this.tel = this.alert.tel;
                 this.map = this.alert.map;
                 this.message = this.alert.message;
+                this.sendSms = this.alert.sendSms;
+                this.sms = this.alert.sms;
+                this.contactsSelected = this.alert.contactsSelected;
+                this.sendPosInSms = this.alert.sendPosInSms;
+                this.recMic = this.alert.recMic;
             }
         },
         onCancel(){
             this.onDismiss("cancel")
         },
         onApply(){
-            this.onDismiss({name:this.name, color:this.color, tel:this.tel, map:this.map, message: this.message})
+            this.onDismiss({
+                name:this.name,
+                color:this.color,
+                tel:this.tel,
+                map:this.map,
+                message: this.message,
+                sendSms: this.sendSms,
+                sms: this.sms,
+                contactsSelected: this.contactsSelected,
+                sendPosInSms: this.sendPosInSms,
+                recMic: this.recMic
+            })
         },
         onDismiss(result){
             //console.log({name:this.name, color:this.color, tel:this.tel, map:this.map});
@@ -142,6 +165,15 @@ export default defineComponent({
         deleteAlert(){
             //TO DO : USE ALERET TO ASK TO THE USER IF HE IS SURE TO DELETE
             this.onDismiss("delete");
+        },
+
+        async pickContact(){
+            const contact = await this.contacts.pickContact();
+            this.contactsSelected.push({name: contact.displayName, tel: contact.phoneNumbers[0].value})
+        },
+        removeContact(i){
+            console.log(i)
+            this.contactsSelected.splice(i,1);
         }
     }
 });
