@@ -59,7 +59,7 @@ export default {
         set('alerts',alerts);
         this.refresh();
       }
-      else{
+      else if(result && result.data !== null && result.data !== undefined){
         const alerts = await get('alerts');
         alerts[this.index] = result.data;
         set('alerts',alerts);

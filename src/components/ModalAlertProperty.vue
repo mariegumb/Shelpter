@@ -28,11 +28,21 @@
             <ion-toggle v-model="this.tel"/>
         </ion-item>
         <ion-item>
-            <div style="display:flex;flex-direction:column;width:100%">
-                <div style="display:flex;justify-content:space-between;margin:10px 0px">
+            <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
+                <div style="display:flex;justify-content:space-between;">
                     <ion-label style="color:grey">Share position with users</ion-label>
                     <ion-toggle v-model="this.map"/>
                 </div>
+                <ion-radio-group v-if="map" style="width:100%;margin-top:10px;" @ionChange="onChangeSharePos" v-bind:value="sharePosInfo">
+                    <ion-item>
+                        <ion-label style="color:grey">Send to your protectors only</ion-label>
+                        <ion-radio value="protectors"/>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label style="color:grey">Send to all users of the app</ion-label>
+                        <ion-radio value="everyone"/>
+                    </ion-item>
+                </ion-radio-group>
                 <div v-if="map" style="width:100%">
                     <ion-item>
                         <ion-label style="color:grey" position="stacked">Custom message</ion-label>
@@ -54,8 +64,14 @@
                     </div>
                 </ion-item>
                 <ion-item>
+                    <div style="width:100%;display:flex;justify-content:space-between;margin:10px 0px">
+                        <ion-label style="color:grey">Send to 114 (police)</ion-label>
+                        <ion-toggle v-model="this.send114"/>
+                    </div>
+                </ion-item>
+                <ion-item>
                     <div style="display:flex;flex-direction:column;width:100%;margin:10px 0px">
-                        <div style="display:flex;flex-direction:row;justify-content:space-between;width:100%;">
+                        <div style="display:flex;flex-direction:row;justify-content:space-between;width:100%;align-items:center;">
                             <ion-label style="color:grey">Choose contacts</ion-label>
                             <ion-button color="primary" @click="pickContact">Add a contact</ion-button>
                         </div>
@@ -75,8 +91,41 @@
             </div>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey">Record microphone</ion-label>
-            <ion-toggle v-model="this.recMic"/>
+            <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
+                <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+                    <ion-label style="color:grey">Call</ion-label>
+                    <ion-toggle v-model="this.call"/>
+                </div>
+                <ion-radio-group v-if="call" style="width:100%;margin-top:10px;" @ionChange="onChangeCall" v-bind:value="callInfo">
+                    <ion-item>
+                        <ion-label style="color:grey">Call 17</ion-label>
+                        <ion-radio value="police"/>
+                    </ion-item>
+                    <ion-item @click="chooseCaller">
+                        <ion-label style="color:grey">Call {{ contactToCall.name }}</ion-label>
+                        <ion-radio value="contact"/>
+                    </ion-item>
+                </ion-radio-group>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
+                <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+                    <ion-label style="color:grey">Recording</ion-label>
+                    <ion-toggle v-model="this.record"/>
+                </div>
+                <ion-radio-group v-if="record" style="width:100%;margin-top:10px;" @ionChange="onChangeRecord" v-bind:value="recordInfo">
+                    
+                    <ion-item>
+                        <ion-label style="color:grey">Record only microphone</ion-label>
+                        <ion-radio value="mic"/>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label style="color:grey">Record camera and microphone</ion-label>
+                        <ion-radio value="cam"/>
+                    </ion-item>
+                </ion-radio-group>
+            </div>
         </ion-item>
 
 
@@ -89,7 +138,7 @@
 
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonToggle, IonLabel,
- IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea } from '@ionic/vue';
+ IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea, IonRadio, IonRadioGroup } from '@ionic/vue';
 import { defineComponent } from "vue";
 import { Contacts } from '@ionic-native/contacts';
 
@@ -100,7 +149,7 @@ export default defineComponent({
         alert: {default: null}
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton, IonToggle, IonItem,
-    IonLabel, IonInput, IonSelect, IonSelectOption, IonTextarea },
+    IonLabel, IonInput, IonSelect, IonSelectOption, IonTextarea, IonRadio, IonRadioGroup },
     data(){
         return{
             content: 'Content',
@@ -114,7 +163,13 @@ export default defineComponent({
             sms: 'your custom sms here',
             contactsSelected: [],
             sendPosInSms: false,
-            recMic:false,
+            record: false,
+            recordInfo: 'mic',
+            send114: false,
+            sharePosInfo: 'protectors',
+            call: false,
+            callInfo: 'police',
+            contactToCall: { name: 'someone', tel: 'none'}
         }
     },
     setup(){
@@ -138,7 +193,13 @@ export default defineComponent({
                 this.sms = this.alert.sms;
                 this.contactsSelected = this.alert.contactsSelected;
                 this.sendPosInSms = this.alert.sendPosInSms;
-                this.recMic = this.alert.recMic;
+                this.record = this.alert.record;
+                this.recordInfo = this.alert.recordInfo
+                this.send114 = this.alert.send114;
+                this.sharePosInfo = this.alert.sharePosInfo;
+                this.call = this.alert.call;
+                this.callInfo = this.alert.callInfo;
+                this.contactToCall = this.alert.contactToCall;
             }
         },
         onCancel(){
@@ -155,7 +216,13 @@ export default defineComponent({
                 sms: this.sms,
                 contactsSelected: this.contactsSelected,
                 sendPosInSms: this.sendPosInSms,
-                recMic: this.recMic
+                record: this.record,
+                recordInfo: this.recordInfo,
+                send114: this.send114,
+                sharePosInfo: this.sharePosInfo,
+                call: this.call,
+                callInfo: this.callInfo,
+                contactToCall: this.contactToCall,
             })
         },
         onDismiss(result){
@@ -174,6 +241,20 @@ export default defineComponent({
         removeContact(i){
             console.log(i)
             this.contactsSelected.splice(i,1);
+        },
+        onChangeRecord(event){
+            this.recordInfo = event.detail.value
+        },
+        onChangeSharePos(event){
+            this.sharePosInfo = event.detail.value
+            console.log(this.sharePosInfo)
+        },
+        onChangeCall(event){
+            this.callInfo = event.detail.value
+        },
+        async chooseCaller(){
+            const contact = await this.contacts.pickContact();
+            this.contactToCall = { name: contact.displayName, tel: contact.phoneNumbers[0].value }
         }
     }
 });
