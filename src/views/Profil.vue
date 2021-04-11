@@ -2,7 +2,7 @@
     <ion-page>
         <Header/>
         <ion-content :fullScreen="true">
-          <div class="bg-purple-600">
+          <div class="bg-purple-600" v-if="showDonationInfo">
             <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
               <div class="flex items-center justify-between flex-wrap">
                 <div class="w-0 flex-1 flex items-center">
@@ -24,7 +24,7 @@
                   </a>
                 </div>
                 <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
-                  <button type="button" class="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2">
+                  <button @click="closeDonationInfo" type="button" class="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2">
                     <!-- Heroicon name: outline/x -->
                     <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -60,36 +60,56 @@
                 <div class="flex pt-4 justify-center">
                   <div class="mx-2 text-lg text-center">
                     <span>Aidés</span>
-                    <span class="block text-xl">4</span>
+                    <span class="block text-xl">{{ countHelp }}</span>
                   </div>
                   <div class="mx-2 text-lg text-center">
                     <span>Protégés</span>
-                    <span class="block text-xl">2</span>
+                    <span class="block text-xl">{{ mesProteges.length }}</span>
                   </div>
                   <div class="mx-2 text-lg text-center">
                     <span>Protecteurs</span>
-                    <span class="block text-xl">5</span>
+                    <span class="block text-xl">{{ mesProtecteurs.length }}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div class="text-purple-800 font-bold text-3xl pl-4 ">
-              <span>Caroline</span>
+              <span>{{me.login}}</span>
             </div>
           </div>
           <div class="mt-6 mb-4">
             <div class="mx-2 text-lg font-bold">
               <span>Mes Protecteurs</span>
-              <button @click="newProtecteurs" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
-                <ion-icon :icon="addOutline"></ion-icon>
-              </button>
+              <div class="flex">
+                <div v-for="user in mesProtecteurs" v-bind:key="user.id">
+                  <button @click="openInfoUser(user,roleProtecteur)" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
+                    <img/>
+                  </button>
+                  <div class="text-center text-purple-600">
+                    {{user.login}}
+                  </div>
+                </div>
+                <button @click="newProtecteur" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
+                  <ion-icon :icon="addOutline"></ion-icon>
+                </button>
+              </div>
             </div>
 
             <div class="mx-2 text-lg font-bold">
               <span>Mes Protégés</span>
-              <button @click="newProtecteurs" class="mt-2 mb-1 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
-                <ion-icon :icon="addOutline"></ion-icon>
-              </button>
+              <div class="flex">
+                <div v-for="user in mesProteges" v-bind:key="user.id">
+                  <button @click="openInfoUser(user,roleProtege)" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
+                    <img/>
+                  </button>
+                  <div class="text-center text-purple-600">
+                    {{user.login}}
+                  </div>
+                </div>
+                <button @click="newProtege" class="mt-2 mb-1 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
+                  <ion-icon :icon="addOutline"></ion-icon>
+                </button>
+              </div>
             </div>
           </div>
           <div class="mt-6 mb-6">
@@ -117,32 +137,57 @@
 </template>
 
 <script>
-import { IonPage, IonContent, IonButton, modalController } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, modalController, IonIcon } from '@ionic/vue';
 import Header from '@/components/Header';
-import {brushOutline} from "ionicons/icons";
+import { brushOutline, addOutline } from "ionicons/icons";
 import { remove } from '@/composables/storage';
 import { useRouter } from 'vue-router';
 
-import {addNewToGallery} from '../services/camera'
+//import {addNewToGallery} from '../services/camera'
 import ModalProfilSettings from '@/components/ModalProfilSettings.vue';
 import ModalDonation from '@/components/ModalDonation.vue';
+import ModalAddProtect from '@/components/ModalAddProtect';
+import ModalInfoUser from '@/components/ModalInfoUser';
 
+import { get } from '@/composables/storage';
+import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect } from '@/composables/mongoApi';
 
+const roleProtege = 'protegé';
+const roleProtecteur = 'protecteur';
 
 export default {
     name:"Profil",
-    components: {IonPage, IonContent, Header, IonButton },
+    components: {IonPage, IonContent, Header, IonButton, IonIcon },
   setup() {
     const router = useRouter();
+
     return {
       brushOutline,
-      router
+      addOutline,
+      router,
+      roleProtege,
+      roleProtecteur
     };
   },
   created(){
-    addNewToGallery()
+    //addNewToGallery()
   },
+  data(){
+    return {
+      me: {},
+      mesProtecteurs: [],
+      mesProteges: [],
+      showDonationInfo: true,
 
+      countHelp: 0,
+    }
+  },
+  async beforeMount(){
+    const login = await get('login');
+    const me = await getUserByLogin(login);
+    this.me = me;
+    await this.loadProtect();
+  },
   methods:{
     async deconnect(){
       await remove('login');
@@ -195,7 +240,84 @@ export default {
         console.log(result)
       }
     },
+    closeDonationInfo(){
+      this.showDonationInfo = false;
+    },
 
+    async newProtecteur(){
+      const result = await this.newUserProtection(roleProtecteur);
+      await this.closedModalAddProtect(result);
+    },
+    async newProtege(){
+      const result = await this.newUserProtection(roleProtege);
+      await this.closedModalAddProtect(result);
+    },
+    async newUserProtection(role){
+      const modal = await modalController.create({
+        component: ModalAddProtect,
+        componentProps:{
+          title: `ajouter un ${role}`,
+          role: role,
+          myLogin: this.me.login
+        }
+      })
+
+      await modal.present();
+
+      return await modal.onDidDismiss();
+    },
+    async closedModalAddProtect(result){
+      if(result.data === "cancel"){
+        console.log("cancelled");
+      }
+      else if(result && result.data !== null && result.data !== undefined){
+        if(result.data.role === roleProtecteur){
+          console.log(await addProtect(this.me.login, result.data.login));
+        }
+        else if(result.data.role === roleProtege){
+          console.log(await addProtect(result.data.login, this.me.login));
+        }
+        await this.loadProtect();
+      }
+    },
+    async loadProtect(){
+      const mesProtecteurs = await getMesProtecteurs(this.me.login);
+      this.mesProtecteurs = mesProtecteurs;
+      const mesProteges = await getMesProteges(this.me.login);
+      this.mesProteges = mesProteges;
+    },
+    async openInfoUser(user,role){
+      console.log(role)
+      const modal = await modalController.create({
+        component: ModalInfoUser,
+        componentProps:{
+          title: `${user.login} profile`,
+          user: user,
+          role: role
+        }
+      })
+
+      await modal.present();
+
+      const result = await modal.onDidDismiss();
+      await this.closedModalInfoUser(result);
+    },
+    async closedModalInfoUser(result){
+      if(result.data === "cancel"){
+        console.log("cancelled");
+      }
+      else if(result && result.data !== null && result.data !== undefined){
+        if(result.data.action === 'supprimer'){
+          if(result.data.role === roleProtecteur){
+            await removeProtect(this.me.login, result.data.login);
+          }
+          else if(result.data.role === roleProtege){
+            await removeProtect(result.data.login, this.me.login);
+          }
+          await this.loadProtect();
+        }
+      }
+    }
   }
 }
 </script>

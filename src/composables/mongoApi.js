@@ -32,7 +32,48 @@ export const getAllAlerts = async () => {
     return await (await axios.get(addr+'/alerts')).data;
 }
 
+export const getUsers = async () => {
+    return await (await axios.get(addr+'/users')).data;
+}
 
+
+
+export const getUserByLogin = async (login) => {
+    return await (await axios.get(addr+'/users/'+login)).data[0];
+}
+
+export const getMesProtecteurs = async (login) => {
+    const protects = await (await axios.get(addr+'/protect/protege/'+login)).data;
+    const protecteurs = [];
+    for(const protect of protects){
+        const user = await getUserByLogin(protect.login_protecteur);
+        protecteurs.push(user);
+    }
+    return protecteurs;
+}
+
+export const getMesProteges = async (login) => {
+    const protects = await (await axios.get(addr+'/protect/protecteur/'+login)).data;
+    const proteges = [];
+    for(const protect of protects){
+        const user = await getUserByLogin(protect.login_protege);
+        proteges.push(user);
+    }
+    return proteges;
+}
+
+export const addProtect = async (loginProtege,loginProtecteur) => {
+    return await axios.post(addr+'/protect',{
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        login_protecteur: loginProtecteur,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        login_protege: loginProtege
+    })
+}
+
+export const removeProtect = async (loginProtege,loginProtecteur) => {
+    return await axios.delete(addr+'/protect/'+loginProtecteur+'/'+loginProtege);
+}
 
 /* STORING FILES */
 
