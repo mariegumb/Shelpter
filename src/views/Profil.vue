@@ -259,20 +259,26 @@ export default {
     },
 
     async newProtecteur(){
-      const result = await this.newUserProtection(roleProtecteur);
+      const result = await this.newUserProtection(roleProtecteur, this.mesProtecteurs);
       await this.closedModalAddProtect(result);
     },
     async newProtege(){
-      const result = await this.newUserProtection(roleProtege);
+      const result = await this.newUserProtection(roleProtege, this.mesProteges);
       await this.closedModalAddProtect(result);
     },
-    async newUserProtection(role){
+    async newUserProtection(role, already){
+      const logins = [];
+      for(const user of already){
+        logins.push(user.login);
+      }
+      
       const modal = await modalController.create({
         component: ModalAddProtect,
         componentProps:{
           title: `ajouter un ${role}`,
           role: role,
-          myLogin: this.me.login
+          myLogin: this.me.login,
+          already: logins,
         }
       })
 

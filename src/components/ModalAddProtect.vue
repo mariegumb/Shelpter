@@ -30,7 +30,8 @@ export default defineComponent({
     props: {
         title: String,
         role: String,
-        myLogin: String
+        myLogin: String,
+        already: []
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton, IonInput, IonLabel, IonItem },
     data(){
@@ -56,7 +57,7 @@ export default defineComponent({
             else{
                 const filtred = [];
                 for(const user of this.users){
-                    if(user.login.includes(event.detail.value) && user.login !== this.myLogin){
+                    if(user.login.includes(event.detail.value) && user.login !== this.myLogin && !this.already.includes(user.login)){
                         filtred.push(user)
                     }
                 }
