@@ -36,7 +36,13 @@
           </div>
           <div>
             <div class="flex w-full">
-              <div class="rounded-full h-30 w-24 bg-center bg-cover mt-3 ml-3" id="profil">
+              <div class="h-24 w-24 mt-3 ml-3">
+                <img v-if="photoUrl !== '' && photoUrl !== 'photoNotFound'" v-bind:src="photoUrl" class="rounded-full h-24 w-24"/>
+                <span v-else class="z-0 inline-block rounded-full overflow-hidden bg-gray-100">
+                  <svg class="h-full w-full text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </span>
               </div>
               <div class="flex-grow px-1 py-3">
                   <div class="flex justify-center">
@@ -82,9 +88,12 @@
               <span>Mes Protecteurs</span>
               <div class="flex">
                 <div v-for="user in mesProtecteurs" v-bind:key="user.id">
-                  <button @click="openInfoUser(user,roleProtecteur)" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
-                    <img/>
-                  </button>
+                  <div @click="openInfoUser(user,roleProtecteur)" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
+                    <img v-if="user.photo !== 'photoNotFound'" v-bind:src="user.photo" class="rounded-full h-20 w-20"/>
+                    <svg v-else class="h-full w-full text-purple-600 rounded-full" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </div>
                   <div class="text-center text-purple-600">
                     {{user.login}}
                   </div>
@@ -100,7 +109,10 @@
               <div class="flex">
                 <div v-for="user in mesProteges" v-bind:key="user.id">
                   <button @click="openInfoUser(user,roleProtege)" class="mt-2 mb-2 bg-gray-300 h-20 w-20 rounded-full flex items-center justify-center text-4xl">
-                    <img/>
+                    <img v-if="user.photo !== 'photoNotFound'" v-bind:src="user.photo" class="rounded-full h-20 w-20"/>
+                    <svg v-else class="h-full w-full text-purple-600 rounded-full" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
                   </button>
                   <div class="text-center text-purple-600">
                     {{user.login}}
@@ -150,7 +162,7 @@ import ModalAddProtect from '@/components/ModalAddProtect';
 import ModalInfoUser from '@/components/ModalInfoUser';
 
 import { get } from '@/composables/storage';
-import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect } from '@/composables/mongoApi';
+import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect, getProfilePhoto } from '@/composables/mongoApi';
 
 const roleProtege = 'protegé';
 const roleProtecteur = 'protecteur';
@@ -166,7 +178,8 @@ export default {
       addOutline,
       router,
       roleProtege,
-      roleProtecteur
+      roleProtecteur,
+      getProfilePhoto
     };
   },
   created(){
@@ -178,7 +191,7 @@ export default {
       mesProtecteurs: [],
       mesProteges: [],
       showDonationInfo: true,
-
+      photoUrl: '',
       countHelp: 0,
     }
   },
@@ -187,6 +200,7 @@ export default {
     const me = await getUserByLogin(login);
     this.me = me;
     await this.loadProtect();
+    this.photoUrl = await getProfilePhoto(login);
   },
   methods:{
     async deconnect(){

@@ -42,26 +42,6 @@ export const getUserByLogin = async (login) => {
     return await (await axios.get(addr+'/users/'+login)).data[0];
 }
 
-export const getMesProtecteurs = async (login) => {
-    const protects = await (await axios.get(addr+'/protect/protege/'+login)).data;
-    const protecteurs = [];
-    for(const protect of protects){
-        const user = await getUserByLogin(protect.login_protecteur);
-        protecteurs.push(user);
-    }
-    return protecteurs;
-}
-
-export const getMesProteges = async (login) => {
-    const protects = await (await axios.get(addr+'/protect/protecteur/'+login)).data;
-    const proteges = [];
-    for(const protect of protects){
-        const user = await getUserByLogin(protect.login_protege);
-        proteges.push(user);
-    }
-    return proteges;
-}
-
 export const addProtect = async (loginProtege,loginProtecteur) => {
     return await axios.post(addr+'/protect',{
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -102,4 +82,43 @@ export const sendFilesToMongo = async (fileId, filePhoto) => {
     const idId = await storeId(fileId);
     const photoId = await storePhoto(filePhoto);
     return {fileIdId: idId, filePhotoId: photoId};
+}
+
+
+
+export const getPhotoUrl = (user) => {
+    const photoId = user.filePhoto;
+    if(photoId !== undefined && photoId !== null && photoId !== ''){
+        return addr+'/files/'+photoId;
+    }
+    else{
+        return 'photoNotFound'
+    }
+}
+
+export const getProfilePhoto = async (login) => {
+    const user = await(await axios.get(addr+'/users/'+login)).data[0];
+    return getPhotoUrl(user)
+}
+
+export const getMesProtecteurs = async (login) => {
+    const protects = await (await axios.get(addr+'/protect/protege/'+login)).data;
+    const protecteurs = [];
+    for(const protect of protects){
+        const user = await getUserByLogin(protect.login_protecteur);
+        user.photo = getPhotoUrl(user)
+        protecteurs.push(user);
+    }
+    return protecteurs;
+}
+
+export const getMesProteges = async (login) => {
+    const protects = await (await axios.get(addr+'/protect/protecteur/'+login)).data;
+    const proteges = [];
+    for(const protect of protects){
+        const user = await getUserByLogin(protect.login_protege);
+        user.photo = getPhotoUrl(user)
+        proteges.push(user);
+    }
+    return proteges;
 }
