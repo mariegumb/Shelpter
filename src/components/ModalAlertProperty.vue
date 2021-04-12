@@ -6,21 +6,23 @@
     </ion-header>
     <ion-content class="ion-padding">
         <div style="display:flex;justify-content:flex-end;">
-            <ion-button @click="deleteAlert" color="danger">Delete</ion-button>
+            <ion-button @click="deleteAlert" color="danger">Supprimer</ion-button>
         </div>
         <ion-item>
-            <ion-label style="color:grey" position="stacked">Name</ion-label>
+            <ion-label style="color:grey" position="stacked">Nom</ion-label>
             <ion-input v-model="this.name" placeholder="Name here"/>
         </ion-item>
         <ion-item>
             <ion-label style="color:grey" posistion="stacked">Color</ion-label>
             <ion-select v-model="this.color" ok-text="Choose" cancel-text="Cancel">
-                <ion-select-option value="bg-red-500">Red</ion-select-option>
-                <ion-select-option value="bg-purple-500">Purple</ion-select-option>
-                <ion-select-option value="bg-blue-500">Blue</ion-select-option>
-                <ion-select-option value="bg-pink-500">Pink</ion-select-option>
+                <ion-select-option value="bg-red-500">Rouge</ion-select-option>
+                <ion-select-option value="bg-purple-500">Violet</ion-select-option>
+                <ion-select-option value="bg-blue-500">Bleu</ion-select-option>
+                <ion-select-option value="bg-pink-500">Rose</ion-select-option>
                 <ion-select-option value="bg-orange-500">Orange</ion-select-option>
-                <ion-select-option value="bg-yellow-500">Yellow</ion-select-option>
+                <ion-select-option value="bg-yellow-500">Jaune</ion-select-option>
+                <ion-select-option value="bg-green-500">Vert</ion-select-option>
+                <ion-select-option value="bg-gray-900">Gris</ion-select-option>
             </ion-select>
         </ion-item>
         <ion-item>

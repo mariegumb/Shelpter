@@ -9,9 +9,19 @@
               </div>
             </div>
 
-            <div id="map" style="height:400px"></div>
+            <div id="map" style="height:500px"></div>
 
             <ion-button @click="centerMap" color="purple">Recentrer la carte</ion-button>
+            <div>
+              <p class="font-bold text-center"> X personnes se sont à proximités</p>
+              
+              /*ATTENTION A Modifier*/
+              
+              <ion-item>
+                  <ion-label class="text-center text-purple-600">Avertir de ma présence en tant que Justicier</ion-label>
+                  <ion-toggle v-model="this.tel"/>
+              </ion-item>
+            </div>
         </ion-content>
     </ion-page>
 </template>
