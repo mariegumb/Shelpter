@@ -84,10 +84,16 @@ export const sendFilesToMongo = async (fileId, filePhoto) => {
     return {fileIdId: idId, filePhotoId: photoId};
 }
 
+export const changePhoto = async (login, file) => {
+    const formData = new FormData();
+    formData.append('profile_photo',file);
+    const photoId = await (await axios.post(addr+'/files/profile_photo',formData)).data;
+    await axios.patch(addr+'/users/'+login+'/photo',{photoId: photoId})
+}
 
 
 export const getPhotoUrl = (user) => {
-    const photoId = user.filePhoto;
+    const photoId = user.profile_photo;
     if(photoId !== undefined && photoId !== null && photoId !== ''){
         return addr+'/files/'+photoId;
     }

@@ -13,7 +13,7 @@
             <ion-input v-model="this.name" placeholder="Name here"/>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey" posistion="stacked">Color</ion-label>
+            <ion-label posistion="stacked">Color</ion-label>
             <ion-select v-model="this.color" ok-text="Choose" cancel-text="Cancel">
                 <ion-select-option value="bg-red-500">Red</ion-select-option>
                 <ion-select-option value="bg-purple-500">Purple</ion-select-option>
@@ -24,13 +24,13 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey">Fake call</ion-label>
+            <ion-label>Fake call</ion-label>
             <ion-toggle v-model="this.tel"/>
         </ion-item>
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;">
-                    <ion-label style="color:grey">Share position with users</ion-label>
+                    <ion-label>Share position with users</ion-label>
                     <ion-toggle v-model="this.map"/>
                 </div>
                 <ion-radio-group v-if="map" style="width:100%;margin-top:10px;" @ionChange="onChangeSharePos" v-bind:value="sharePosInfo">
@@ -52,7 +52,7 @@
             </div>
         </ion-item>
         <ion-item>
-            <ion-label style="color:grey">Send a sms</ion-label>
+            <ion-label>Send a sms</ion-label>
             <ion-toggle v-model="this.sendSms"/>
         </ion-item>
         <ion-item v-if="sendSms">
@@ -93,7 +93,7 @@
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-                    <ion-label style="color:grey">Call</ion-label>
+                    <ion-label>Call</ion-label>
                     <ion-toggle v-model="this.call"/>
                 </div>
                 <ion-radio-group v-if="call" style="width:100%;margin-top:10px;" @ionChange="onChangeCall" v-bind:value="callInfo">
@@ -111,7 +111,7 @@
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-                    <ion-label style="color:grey">Recording</ion-label>
+                    <ion-label>Recording</ion-label>
                     <ion-toggle v-model="this.record"/>
                 </div>
                 <ion-radio-group v-if="record" style="width:100%;margin-top:10px;" @ionChange="onChangeRecord" v-bind:value="recordInfo">

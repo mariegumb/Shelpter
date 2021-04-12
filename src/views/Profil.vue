@@ -196,13 +196,17 @@ export default {
     }
   },
   async beforeMount(){
-    const login = await get('login');
-    const me = await getUserByLogin(login);
-    this.me = me;
-    await this.loadProtect();
-    this.photoUrl = await getProfilePhoto(login);
+    await this.initData();
   },
   methods:{
+    async initData(){
+      const login = await get('login');
+      const me = await getUserByLogin(login);
+      this.me = me;
+      await this.loadProtect();
+      this.photoUrl = await getProfilePhoto(login);
+    },
+
     async deconnect(){
       await remove('login');
       await remove('mdp');
@@ -213,7 +217,8 @@ export default {
       const modal = await modalController.create({
         component: ModalProfilSettings,
         componentProps:{
-          title: 'Modifier le profil'
+          title: 'Modifier le profil',
+          me: this.me,
         }
       });
 
@@ -230,6 +235,7 @@ export default {
       else{
         console.log(result)
       }
+      this.initData();
     },
 
     async openDonation(){
@@ -271,7 +277,7 @@ export default {
       for(const user of already){
         logins.push(user.login);
       }
-      
+
       const modal = await modalController.create({
         component: ModalAddProtect,
         componentProps:{

@@ -7,18 +7,18 @@
     <ion-content class="ion-padding">
 <!-- This example requires Tailwind CSS v2.0+ -->
         <div class="place-items-stretch">
-            <div class="mt-3 ml-20 flex justify-items-stretch ">
-                <span class="z-0 inline-block h-1/2 w-1/2 rounded-full overflow-hidden bg-gray-100">
+            <div class="flex-col items-center">
+                <div class="mt-3 flex justify-center">
+                    <img v-if="photoUrl !== '' && photoUrl !== 'photoNotFound'" v-bind:src="photoUrl" class="rounded-full h-40 w-40"/>
+                    <span v-else class="z-0 inline-block h-40 w-40 rounded-full overflow-hidden bg-gray-100">
                         <svg class="h-full w-full text-purple-600" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                </span>
-                <div class="z-10 place-items-stretch">
-                    <button type="button" class="hover:bg-purple-600 focus:ring-2 px-3 py-3 whitespace-nowrap">
-                        <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                    </button>
+                    </span>
+                </div>
+                <div class="flex justify-center mt-4 text-purple-500">
+                    <label for="photo">changer de photo</label>
+                    <input type="file" class="hidden" name="photo" id="photo" capture="camera" accept="image/*" @change="onPhotoTaken"/>
                 </div>
             </div>
         </div>
@@ -31,25 +31,25 @@
                     <div class="grid grid-cols-6 gap-6">
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="login" class="block text-sm font-medium text-purple-600">Login Name*</label>
-                            <input type="text" name="login" id="login" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Login" autocomplete="given-name">
+                            <label for="login" class="block text-sm font-medium text-purple-600">Login</label>
+                            <input v-bind:disabled="!modify" v-model="dataMe.login" type="text" name="login" id="login" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Login" autocomplete="given-name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="first_name" class="block text-sm font-medium text-purple-600">Prenom*</label>
-                            <input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="First Name">
+                            <label for="first_name" class="block text-sm font-medium text-purple-600">Prenom</label>
+                            <input v-bind:disabled="!modify" v-model="dataMe.prenom" type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="First Name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="last_name" class="block text-sm font-medium text-purple-600">Nom*</label>
-                            <input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Last Name">
+                            <label for="last_name" class="block text-sm font-medium text-purple-600">Nom</label>
+                            <input v-bind:disabled="!modify" v-model="dataMe.nom" type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Last Name">
                         </div>
 
                         <div class="col-span-6 sm:col-span-4">
-                            <label for="email_address" class="block text-sm font-medium text-purple-600">Email*</label>
-                            <input type="text" name="email_address" id="email_address" autocomplete="email" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Email">
+                            <label for="email_address" class="block text-sm font-medium text-purple-600">Email</label>
+                            <input v-bind:disabled="!modify" v-model="dataMe.mail" type="text" name="email_address" id="email_address" autocomplete="email" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Email">
                         </div>
-
+<!--
                         <div class="col-span-6 sm:col-span-4">
                             <label for="phone" class="block text-sm font-medium text-purple-600">Telephone*</label>
                             <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" name="phone" id="phone" autocomplete="phone" class="mt-1 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="+33">
@@ -93,13 +93,16 @@
                             <label for="postal_code" class="block text-sm font-medium text-purple-600">ZIP / Code Postal</label>
                             <input type="text" name="postal_code" id="postal_code" autocomplete="postal-code" class="mt-1 mb-2 w-full px-2  py-2 text-gray-700 bg-gray-200 rounded" placeholder="Code Postal">
                         </div>
+
+                        -->
+
                     </div>
-                    <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <p class="mt-1 text-sm text-gray-600">
-                            *If you would like to change you must enter here
-                            </p>
-                        </div>
+                    <div v-if="!modify" class="flex justify-center mt-4">
+                        <ion-button @click="onModifyClick" color="purple">Modifier</ion-button>
+                    </div>
+                    <div v-else class="flex justify-center mt-4">
+                        <ion-button @click="onClickAnnuler" color="light">Annuler</ion-button>
+                        <ion-button @click="onClickApply" color="purple">Appliquer</ion-button>
                     </div>
                 </div>
                 </div>
@@ -107,17 +110,18 @@
             </div>
         </div>
         </div>
-        <div class="flex justify-center">
-            <ion-button @click="onCancel" color="light">Cancel</ion-button>
-            <ion-button @click="onApply">Apply</ion-button>
+        <div class="flex justify-center mt-3">
+            <ion-button @click="onClose" color="light">Close</ion-button>
         </div>
-        <ion-button @click="onSure" color="red-400" class="flex m-5 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-red-400 hover:bg-red-500">Supprimer son compte</ion-button>
+        <ion-button color="red-400" class="flex m-5 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-red-400 hover:bg-red-500">Supprimer son compte</ion-button>
     </ion-content>
 </template>
 
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, modalController } from '@ionic/vue';
 import { defineComponent } from "vue";
+
+import { getPhotoUrl, changePhoto, getUserByLogin } from '@/composables/mongoApi';
 
 export default defineComponent({
     name: 'ModalProfilSettings',
@@ -126,25 +130,48 @@ export default defineComponent({
             type: String,
             default: 'Modal'
         },
+        me: {},
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton },
     data(){
         return{
-
+            photoUrl: '',
+            dataMe: {},
+            modify: false,
         }
     },
     methods:{
-        onCancel(){
+        onClose(){
             //si cest annule
-            this.onDismiss("cancel")
-        },
-        onApply(){
-            //si cest valider
-            this.onDismiss("apply")
+            this.onDismiss("close")
         },
         onDismiss(result){
             modalController.dismiss(result);
         },
+        async onPhotoTaken(event){
+            if(event.target.files.length > 0 && event.target.files[0] !== null){
+                await changePhoto(this.me.login, event.target.files[0]);
+                await this.reloadPhoto();
+            }
+        },
+        async reloadPhoto(){
+            const newMe = await getUserByLogin(this.me.login);
+            this.photoUrl = getPhotoUrl(newMe);
+        },
+        onModifyClick(){
+            this.modify = true;
+        },
+        onClickAnnuler(){
+            this.modify = false;
+            this.dataMe = this.me;
+        },
+        onClickApply(){
+            console.log(this.dataMe)
+        }
+    },
+    async beforeMount(){
+        this.photoUrl = getPhotoUrl(this.me);
+        this.dataMe = JSON.parse(JSON.stringify(this.me));
     }
 });
 </script>
