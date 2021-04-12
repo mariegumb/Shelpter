@@ -52,8 +52,6 @@ export default {
         async getAlerts(){
             try{
                 this.alerts = await getAllAlerts();
-                this.alerts.push({user: 'John Travolta', message: 'On me suit', status: 1})
-                this.alerts.push({user: 'Pablo Picasso', message: 'Un voleur est parti avec mes peinture', status: 2})
             }
             catch(err){
                 console.log(err);

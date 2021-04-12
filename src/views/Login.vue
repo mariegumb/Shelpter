@@ -19,7 +19,7 @@
               <ion-input v-model="inptMdp" placeholder="Mot de passe" type="password"></ion-input>
             </ion-item>
             <div v-if="wrongCred">
-              <ion-label >Wrong credentials</ion-label>
+              <ion-label >Utilisateur introuvable</ion-label>
             </div>
             <div class="mt-4 p-2">
               <router-link to="/inscription">

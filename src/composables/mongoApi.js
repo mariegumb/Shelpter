@@ -6,12 +6,15 @@ import axios from 'axios';
 //export const addr = 'http://192.168.1.76:3000';
 //export const addr = 'http://localhost:3000';
 
+
+
 export const addr = 'http://75.119.135.42:3000';
 
 //Check cred
-export const checkCred = async (login,mdp) => {
+export const checkCred = async (login, mdp) => {
     const url = addr+'/users/login/'+login+'/'+mdp;
     const valid = await (await axios.get(url)).data;
+    console.log(valid)
     return valid;
 };
 
@@ -21,7 +24,8 @@ export const storeNewUser = async (user) => {
 }
 
 export const verifyLoginAvailable = async (login) => {
-    return (await (await axios.get(addr+'/users/'+login)).data).length < 1;
+    const res = await axios.get(addr+'/users/'+login)
+    return res.data.length < 1
 }
 
 export const throwAlert = async (body) => {
@@ -32,14 +36,19 @@ export const getAllAlerts = async () => {
     return await (await axios.get(addr+'/alerts')).data;
 }
 
+export const updateAlert = async ({alertId, status}) => {
+    return await axios.patch(addr + '/alerts', {alertId, status})
+}
+
 export const getUsers = async () => {
     return await (await axios.get(addr+'/users')).data;
 }
 
-
-
 export const getUserByLogin = async (login) => {
-    return await (await axios.get(addr+'/users/'+login)).data[0];
+    console.log('ohohohhoh')
+    console.log(login)
+    const res = await axios.get(addr+'/users/'+login)
+    return res.data[0]
 }
 
 export const addProtect = async (loginProtege,loginProtecteur) => {
@@ -90,7 +99,6 @@ export const changePhoto = async (login, file) => {
     const photoId = await (await axios.post(addr+'/files/profile_photo',formData)).data;
     await axios.patch(addr+'/users/'+login+'/photo',{photoId: photoId})
 }
-
 
 export const getPhotoUrl = (user) => {
     const photoId = user.profile_photo;

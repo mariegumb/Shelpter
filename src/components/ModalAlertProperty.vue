@@ -13,7 +13,7 @@
             <ion-input v-model="this.name" placeholder="Name here"/>
         </ion-item>
         <ion-item>
-            <ion-label posistion="stacked">Color</ion-label>
+            <ion-label posistion="stacked">Couleur</ion-label>
             <ion-select v-model="this.color" ok-text="Choose" cancel-text="Cancel">
                 <ion-select-option value="bg-red-500">Rouge</ion-select-option>
                 <ion-select-option value="bg-purple-500">Violet</ion-select-option>
@@ -26,56 +26,56 @@
             </ion-select>
         </ion-item>
         <ion-item>
-            <ion-label>Fake call</ion-label>
+            <ion-label>Faux appel</ion-label>
             <ion-toggle v-model="this.tel"/>
         </ion-item>
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;">
-                    <ion-label>Share position with users</ion-label>
+                    <ion-label>Partager ma position</ion-label>
                     <ion-toggle v-model="this.map"/>
                 </div>
                 <ion-radio-group v-if="map" style="width:100%;margin-top:10px;" @ionChange="onChangeSharePos" v-bind:value="sharePosInfo">
                     <ion-item>
-                        <ion-label style="color:grey">Send to your protectors only</ion-label>
+                        <ion-label style="color:grey">Envoyer seulement aux protecteurs</ion-label>
                         <ion-radio value="protectors"/>
                     </ion-item>
                     <ion-item>
-                        <ion-label style="color:grey">Send to all users of the app</ion-label>
+                        <ion-label style="color:grey">Envoyer à tous les utilisateurs</ion-label>
                         <ion-radio value="everyone"/>
                     </ion-item>
                 </ion-radio-group>
                 <div v-if="map" style="width:100%">
                     <ion-item>
-                        <ion-label style="color:grey" position="stacked">Custom message</ion-label>
+                        <ion-label style="color:grey" position="stacked">Message personnalisé</ion-label>
                         <ion-textarea v-model="this.message"></ion-textarea>
                     </ion-item>
                 </div>
             </div>
         </ion-item>
         <ion-item>
-            <ion-label>Send a sms</ion-label>
+            <ion-label>Envoyer un sms</ion-label>
             <ion-toggle v-model="this.sendSms"/>
         </ion-item>
         <ion-item v-if="sendSms">
             <div style="width:100%">
                 <ion-item>
                     <div style="width:100%;display:flex;justify-content:space-between;margin:10px 0px">
-                        <ion-label style="color:grey">Share position in sms</ion-label>
+                        <ion-label style="color:grey">Partager loc par sms</ion-label>
                         <ion-toggle v-model="this.sendPosInSms"/>
                     </div>
                 </ion-item>
                 <ion-item>
                     <div style="width:100%;display:flex;justify-content:space-between;margin:10px 0px">
-                        <ion-label style="color:grey">Send to 114 (police)</ion-label>
+                        <ion-label style="color:grey">Envoyer à la police</ion-label>
                         <ion-toggle v-model="this.send114"/>
                     </div>
                 </ion-item>
                 <ion-item>
                     <div style="display:flex;flex-direction:column;width:100%;margin:10px 0px">
                         <div style="display:flex;flex-direction:row;justify-content:space-between;width:100%;align-items:center;">
-                            <ion-label style="color:grey">Choose contacts</ion-label>
-                            <ion-button color="primary" @click="pickContact">Add a contact</ion-button>
+                            <ion-label style="color:grey">Choisir un contact</ion-label>
+                            <ion-button color="primary" @click="pickContact">Ajouter un contact</ion-button>
                         </div>
                         <div style="display:flex;flex-direction:column;">
                             <div v-for="(contact, i) in contactsSelected" v-bind:key="i" style="margin:5px;display:flex;justify-content:space-between;with:100%;align-items:center;">
@@ -87,7 +87,7 @@
                     </div>
                 </ion-item>
                 <ion-item>
-                    <ion-label style="color:grey" position="stacked">Custom your sms</ion-label>
+                    <ion-label style="color:grey" position="stacked">Personnaliser son sms</ion-label>
                     <ion-textarea v-model="sms"></ion-textarea>
                 </ion-item>
             </div>
@@ -95,16 +95,16 @@
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-                    <ion-label>Call</ion-label>
+                    <ion-label>Appel</ion-label>
                     <ion-toggle v-model="this.call"/>
                 </div>
                 <ion-radio-group v-if="call" style="width:100%;margin-top:10px;" @ionChange="onChangeCall" v-bind:value="callInfo">
                     <ion-item>
-                        <ion-label style="color:grey">Call 17</ion-label>
+                        <ion-label style="color:grey">Appeler le 17</ion-label>
                         <ion-radio value="police"/>
                     </ion-item>
                     <ion-item @click="chooseCaller">
-                        <ion-label style="color:grey">Call {{ contactToCall.name }}</ion-label>
+                        <ion-label style="color:grey">Appeler {{ contactToCall.name }}</ion-label>
                         <ion-radio value="contact"/>
                     </ion-item>
                 </ion-radio-group>
@@ -113,17 +113,17 @@
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-                    <ion-label>Recording</ion-label>
+                    <ion-label>Enregistrer</ion-label>
                     <ion-toggle v-model="this.record"/>
                 </div>
                 <ion-radio-group v-if="record" style="width:100%;margin-top:10px;" @ionChange="onChangeRecord" v-bind:value="recordInfo">
                     
                     <ion-item>
-                        <ion-label style="color:grey">Record only microphone</ion-label>
+                        <ion-label style="color:grey">Enregistrer qu'avec le micro</ion-label>
                         <ion-radio value="mic"/>
                     </ion-item>
                     <ion-item>
-                        <ion-label style="color:grey">Record camera and microphone</ion-label>
+                        <ion-label style="color:grey">Enregistrer avec micro et caméra</ion-label>
                         <ion-radio value="cam"/>
                     </ion-item>
                 </ion-radio-group>
@@ -132,8 +132,8 @@
 
 
         <div style="display:flex;justify-content:center;">
-            <ion-button @click="onCancel" color="light">Cancel</ion-button>
-            <ion-button @click="onApply">Apply</ion-button>
+            <ion-button @click="onCancel" color="light">Annuler</ion-button>
+            <ion-button @click="onApply"  >Enregistrer</ion-button>
         </div>
     </ion-content>
 </template>
