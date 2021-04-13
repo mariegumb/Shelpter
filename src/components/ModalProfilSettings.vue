@@ -111,7 +111,7 @@
         </div>
         </div>
         <div class="flex justify-center mt-3">
-            <ion-button @click="onClose" color="light">Close</ion-button>
+            <ion-button @click="onClose" color="light">Fermer</ion-button>
         </div>
         <ion-button color="red-400" class="flex m-5 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-red-400 hover:bg-red-500">Supprimer son compte</ion-button>
     </ion-content>

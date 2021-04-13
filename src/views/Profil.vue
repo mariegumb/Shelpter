@@ -36,15 +36,15 @@
           </div>
           <div>
             <div class="flex w-full">
-              <div class="h-24 w-24 mt-3 ml-3">
-                <img v-if="photoUrl !== '' && photoUrl !== 'photoNotFound'" v-bind:src="photoUrl" class="rounded-full h-24 w-24"/>
+              <div class="h-27 w-26 mt-3 ml-3">
+                <img v-if="photoUrl !== '' && photoUrl !== 'photoNotFound'" v-bind:src="photoUrl" class="rounded-full h-27 w-26"/>
                 <span v-else class="z-0 inline-block rounded-full overflow-hidden bg-gray-100">
                   <svg class="h-full w-full text-purple-600" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </span>
               </div>
-              <div class="flex-grow px-1 py-3">
+              <div class="flex-grow mt-5 px-1 py-3">
                   <div class="flex justify-center">
                     <div class="w-1/12"></div>
                     <div class="w-10/12 text-center">
@@ -66,15 +66,15 @@
                 <div class="flex pt-4 justify-center">
                   <div class="mx-2 text-lg text-center">
                     <span>Aidés</span>
-                    <span class="block text-xl">{{ countHelp }}</span>
+                    <span class="block text-lg">{{ countHelp }}</span>
                   </div>
                   <div class="mx-2 text-lg text-center">
                     <span>Protégés</span>
-                    <span class="block text-xl">{{ mesProteges.length }}</span>
+                    <span class="block text-lg">{{ mesProteges.length }}</span>
                   </div>
                   <div class="mx-2 text-lg text-center">
                     <span>Protecteurs</span>
-                    <span class="block text-xl">{{ mesProtecteurs.length }}</span>
+                    <span class="block text-lg">{{ mesProtecteurs.length }}</span>
                   </div>
                 </div>
               </div>

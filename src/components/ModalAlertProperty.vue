@@ -10,10 +10,10 @@
         </div>
         <ion-item>
             <ion-label style="color:grey" position="stacked">Nom</ion-label>
-            <ion-input v-model="this.name" placeholder="Name here"/>
+            <ion-input v-model="this.name" placeholder="Nom de l'alerte"/>
         </ion-item>
         <ion-item>
-            <ion-label posistion="stacked">Couleur</ion-label>
+            <ion-label position="stacked">Couleur</ion-label>
             <ion-select v-model="this.color" ok-text="Choose" cancel-text="Cancel">
                 <ion-select-option value="bg-red-500">Rouge</ion-select-option>
                 <ion-select-option value="bg-purple-500">Violet</ion-select-option>
@@ -25,7 +25,7 @@
                 <ion-select-option value="bg-gray-900">Gris</ion-select-option>
             </ion-select>
         </ion-item>
-        <ion-item>
+        <ion-item class="mt-2">
             <ion-label>Faux appel</ion-label>
             <ion-toggle v-model="this.tel"/>
         </ion-item>
@@ -61,7 +61,7 @@
             <div style="width:100%">
                 <ion-item>
                     <div style="width:100%;display:flex;justify-content:space-between;margin:10px 0px">
-                        <ion-label style="color:grey">Partager loc par sms</ion-label>
+                        <ion-label style="color:grey">Partager Loc par sms</ion-label>
                         <ion-toggle v-model="this.sendPosInSms"/>
                     </div>
                 </ion-item>
@@ -113,7 +113,7 @@
         <ion-item>
             <div style="display:flex;flex-direction:column;margin:10px 0px;width:100%;">
                 <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-                    <ion-label>Enregistrer</ion-label>
+                    <ion-label>Enregistrement</ion-label>
                     <ion-toggle v-model="this.record"/>
                 </div>
                 <ion-radio-group v-if="record" style="width:100%;margin-top:10px;" @ionChange="onChangeRecord" v-bind:value="recordInfo">
@@ -133,7 +133,7 @@
 
         <div style="display:flex;justify-content:center;">
             <ion-button @click="onCancel" color="light">Annuler</ion-button>
-            <ion-button @click="onApply"  >Enregistrer</ion-button>
+            <ion-button @click="onApply" >Enregistrer</ion-button>
         </div>
     </ion-content>
 </template>
