@@ -93,8 +93,7 @@ export default  {
   async mounted(){
     const login = await get('login');
     const mdp = await get('mdp');
-    if(login!=null && mdp!=null){
-      // eslint-disable-next-line no-useless-catch
+    if(!login && !mdp){
       try{
         const valid = await checkCred(login,mdp);
         if(valid){
@@ -103,8 +102,8 @@ export default  {
         else{
           this.wrongCred = true;
         }
-      }
-      catch(err){
+      }catch(err){
+          console.log('hey ya une erreur')
           throw err;
       }
     }

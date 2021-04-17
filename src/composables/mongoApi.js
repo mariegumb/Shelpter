@@ -37,15 +37,15 @@ export const getAllAlerts = async () => {
 }
 
 export const updateAlert = async ({alertId, status}) => {
-    return await axios.patch(addr + '/alerts', {alertId, status})
+    return await axios.patch(addr + '/alerts/' + alertId, {status})
 }
 
 export const getUsers = async () => {
-    return await (await axios.get(addr+'/users')).data;
+    const { data } = await axios.get(addr+'/users')
+    return data
 }
 
 export const getUserByLogin = async (login) => {
-    console.log('ohohohhoh')
     console.log(login)
     const res = await axios.get(addr+'/users/'+login)
     return res.data[0]
