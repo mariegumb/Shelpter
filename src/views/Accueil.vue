@@ -27,7 +27,7 @@
 <script>
 import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
-import {get,set} from '@/composables/storage'
+import {get} from '@/composables/storage'
 import { emitter } from '@/emitter';
 import { socket } from '@/composables/useSocket'
 import { getAllAlerts, updateAlert } from '@/composables/mongoApi';

@@ -111,12 +111,8 @@ export default  {
   async mounted(){
     const login = await get('login');
     const mdp = await get('mdp');
-<<<<<<< HEAD
     if(!login && !mdp){
-=======
-    if(login!=null && mdp!=null){
       const loading = await this.startLoading();
->>>>>>> ca5e9707ee324517ee2e64e206307afde46bc8c7
       try{
         const valid = await checkCred(login,mdp);
         if(valid){
@@ -125,15 +121,8 @@ export default  {
         else{
           this.wrongCred = true;
         }
-<<<<<<< HEAD
       }catch(err){
-          console.log('hey ya une erreur')
-          throw err;
-=======
-      }
-      catch(err){
-        console.error(err)
->>>>>>> ca5e9707ee324517ee2e64e206307afde46bc8c7
+        console.error(err);
       }
       this.stopLoading(loading);
     }
