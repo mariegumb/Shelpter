@@ -26,5 +26,9 @@
     <param name="ios-package" value="RequestLocationAccuracy"/>
   </feature>
 
+  <feature name="Sms">
+    <param name="ios-package" value="Sms"/>
+  </feature>
+
   
 </widget>

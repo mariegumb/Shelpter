@@ -111,7 +111,7 @@ export default  {
   async mounted(){
     const login = await get('login');
     const mdp = await get('mdp');
-    if(!login && !mdp){
+    if(login && mdp){
       const loading = await this.startLoading();
       try{
         const valid = await checkCred(login,mdp);

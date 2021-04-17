@@ -26,5 +26,9 @@
     <param name="android-package" value="cordova.plugin.RequestLocationAccuracy"/>
   </feature>
 
+  <feature name="Sms">
+    <param name="android-package" value="com.cordova.plugins.sms.Sms"/>
+  </feature>
+
   
 </widget>

@@ -16,6 +16,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { throwAlert } from '@/composables/mongoApi';
 import { get } from '@/composables/storage'
 const { Geolocation } = Plugins;
+import { SMS } from '@ionic-native/sms'
 
 export default defineComponent({
   name: 'App',
@@ -51,12 +52,20 @@ export default defineComponent({
       await throwAlert(body);
     }
 
-    emitter.on('alert', (alert) => {
+    emitter.on('alert', async (alert) => {
       if(alert.tel){
         play()
       }
       if(alert.map){
         sendPos(alert)
+      }
+      if(alert.sendSms){
+        console.log(alert.sms + ' ' + JSON.stringify(alert.contactsSelected) + ' ' + alert.sendPosInSms + ' ' + alert.send114)
+        for(const contact of alert.contactsSelected){
+          console.log(contact.name + ' ' + contact.tel)
+          const result = await SMS.send(contact.tel,alert.sms)
+          console.log(result)
+        }
       }
     })
 
@@ -76,7 +85,7 @@ export default defineComponent({
       play,
       socket,
       display,
-      sendPos
+      sendPos,
     }
   },
   created(){
