@@ -64,8 +64,8 @@
                 </form>
             </div>
             <div class="flex flex-wrap justify-center">
-                <ion-button @click="onCancel" color="light">Cancel</ion-button>
-                <ion-button @click="onApply" color="logo">Apply</ion-button>
+                <ion-button @click="onCancel" color="light">Annuler</ion-button>
+                <ion-button @click="onApply" color="logo">Appliquer</ion-button>
             </div>
 
         </div>
