@@ -2,7 +2,7 @@
   <ion-page>
     <Header/>
       <ion-content :fullscreen="true">
-        <div v-if="!alertEnCours" class="h-full flex items-center">
+        <div v-if="!alertEnCours && alerts" class="h-full flex items-center">
             <div  class="w-full grid grid-cols-2">
               <div :class="{'col-span-2 text-center' : alerts.length % 2 === 1 && index === alerts.length -1}" v-for="(alert, index) in alerts" v-bind:key="index">
                 <button @click="activateAlert(alert)" type="button" class="rounded-full w-40 h-40 focus:outline-none text-white text-2xl my-3 mx-3" :class="alert.color + ' focus:' + alert.color.replace('500','600')" v-if="alert!==null">
@@ -12,12 +12,12 @@
             </div>              
         </div>
         <div v-else class="h-full flex p-4">
-          <div class="text-red-500 font-bold">
-              Vous avez une alerte en cours !
-              <p>
-              {{alertEnCours}}
-              </p>
-              <button class="bg-red-500 text-white rounded px-2 py-1 hover:bg-red-600" @click="cancelAlert()">terminer l'alerte</button>
+          <div class="text-red-500 font-bold w-full">
+              Vos coordonnée ainsi que le message suivant on été transmis à la communauté :
+              <div class="w-full my-2 px-3 py-2 rounded bg-red-200 text-red-600 font-italic">      
+                "{{alertEnCours.message}}"
+              </div>
+              <button class="w-full bg-purple-500 text-white rounded px-2 py-1 hover:bg-purple-600" @click="cancelAlert()">Marquer cette alerte comme résolue</button>
             </div>
         </div>
       </ion-content>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { loadingController } from '@ionic/vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
 import {get} from '@/composables/storage'
@@ -32,64 +33,100 @@ import { emitter } from '@/emitter';
 import { socket } from '@/composables/useSocket'
 import { getAllAlerts, updateAlert } from '@/composables/mongoApi';
 import { getUserByLogin } from '@/composables/mongoApi';
-
+import { throwAlert } from '@/composables/mongoApi';
+import { Plugins } from '@capacitor/core';
+import { computed, ref } from '@vue/runtime-core';
+const { Geolocation } = Plugins;
 
 export default  {
   name: 'Accueil',
   components: { IonPage, Header, IonContent },
-  data(){
-    return {
-      alerts: [],
-      notifications: [],
-      currentUser: null
-    }
-  },
-  async created(){
-    const login = await get('login');
-    socket.emit('login',login);
-    if(login){
-      this.currentUser = await getUserByLogin(login);
-    }
-    this.fetchAlerts()
-    this.getNotifications();
-  },
-  computed:{
-    alertEnCours(){
-      if(this.notifications.length > 0 && this.currentUser){
-        return this.notifications.find(a => a.status === 1 && a.user === this.currentUser.login)
-      } else {
-        return null
-      }
-    } 
-  },
   updated(){
       this.fetchAlerts()
   },
-  methods:{
-    async fetchAlerts(){
-      this.alerts = await get('alerts')
-    },
-    async getNotifications(){
-      try{
-          this.notifications = await getAllAlerts();
-      }
-      catch(err){
-          console.log(err);
-          throw err;
-      }
-    },
-    async cancelAlert(){
-      const res = await updateAlert({alertId : this.alertEnCours._id, status: 0})
-      console.log(res)
-    }
-  },
   setup(){
-    const activateAlert = (alert) => {
-      emitter.emit('alert', alert)
+    const notifications = ref([])
+    const currentUser = ref(null)
+    const alerts = ref([])
+
+    const alertEnCours = computed(() => {
+
+      if(notifications.value.length > 0 && currentUser.value){
+        return notifications.value.find(a => a.status === 1 && a.user === currentUser.value.login)
+      } else {
+        return null
+      }
+    })
+
+    const fetchAlerts =  async () => {
+      alerts.value = await get('alerts')
     }
+
+    const getNotifications = async () => {
+          notifications.value = await getAllAlerts();
+    }
+
+    const cancelAlert = async () => {
+      await updateAlert({alertId : alertEnCours.value._id, status: 0})
+      notifications.value = await getAllAlerts();
+    }
+
+    const sendPos = async (alert) => {
+      const loading = await loadingController
+        .create({
+          cssClass: 'my-custom-class',
+          message: 'Alerte en cours d\'envoi',
+          duration: 0,
+        });
+
+      await loading.present();
+
+      loading.value = true
+      try{
+        const position = await Geolocation.getCurrentPosition({enableHighAccuracy: true});
+        const location = position.coords;
+        socket.emit('sendPos',location.latitude,location.longitude);
+        const user = await get('login');
+        const body = {user: user, message: alert.message, lat: location.latitude, long: location.longitude};
+        await throwAlert(body);
+        notifications.value = await getAllAlerts();
+        loading.dismiss()
+      } catch (e){
+        console.log(e)
+        loading.dismiss()
+      }
+    }
+    
+    const activateAlert = (alert) => {
+      if(alert.tel){
+        emitter.emit('phone')
+      }
+      if(alert.map){
+        sendPos(alert)
+      }
+    }
+
+    const fetchLogin = async () => {
+      const login = await get('login');
+      socket.emit('login',login);
+      if(login){
+        currentUser.value = await getUserByLogin(login);
+      }
+      getNotifications()
+      fetchAlerts()
+    }
+    
+    fetchLogin()
 
     return{
       activateAlert,
+      notifications,
+      getNotifications,
+      cancelAlert,
+      fetchAlerts,
+      currentUser,
+      alertEnCours,
+      alerts,
     }
   },
 }
