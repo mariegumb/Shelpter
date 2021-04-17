@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { loadingController } from '@ionic/vue';
+import { loadingController, toastController } from '@ionic/vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
 import {get} from '@/composables/storage'
@@ -37,6 +37,7 @@ import { throwAlert } from '@/composables/mongoApi';
 import { Plugins } from '@capacitor/core';
 import { computed, ref } from '@vue/runtime-core';
 import { SMS } from '@ionic-native/sms'
+import { CallNumber } from '@ionic-native/call-number'
 const { Geolocation } = Plugins;
 
 export default  {
@@ -102,12 +103,29 @@ export default  {
       console.log(alert.sms + ' ' + JSON.stringify(alert.contactsSelected) + ' ' + alert.sendPosInSms + ' ' + alert.send114)
       for(const contact of alert.contactsSelected){
         console.log(contact.name + ' ' + contact.tel)
-        const result = await SMS.send(contact.tel,alert.sms)
-        console.log(result)
+        await SMS.send(contact.tel,alert.sms)
+        if(alert.sendPosInSms){
+          const position = await Geolocation.getCurrentPosition({enableHighAccuracy: true});
+          const { latitude, longitude } = position.coords;
+          await SMS.send(contact.tel,'https://www.google.fr/maps/search/'+latitude+','+longitude+'/@'+latitude+','+longitude+',14z')
+        }
+      }
+      if(alert.send114){
+        console.log('sending sms to the police')
       }
     }
 
-    const activateAlert = (alert) => {
+    const call = (alert) => {
+      if(alert.callInfo === 'police'){
+        console.log('calling the police')
+      }
+      else if(alert.callInfo === 'contact'){
+        console.log(JSON.stringify(alert.contactToCall))
+        CallNumber.callNumber(alert.contactToCall.tel,true)
+      }
+    }
+
+    const activateAlert = async (alert) => {
       if(alert.tel){
         emitter.emit('phone')
       }
@@ -117,6 +135,14 @@ export default  {
       if(alert.sendSms){
         sendSms(alert)
       }
+      if(alert.call){
+        call(alert)
+      }
+      const toast = await toastController.create({
+        message: 'l\'alerte a bien été lancée',
+        duration: 3000
+      })
+      await toast.present();
     }
 
     const fetchLogin = async () => {
