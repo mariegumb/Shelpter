@@ -58,8 +58,10 @@
                 </div>
               </div>
             </div>
-            <div>
-              <ion-button @click="showConditions">conditions</ion-button>
+            <div class="mt-6 flex justify-between items-center">
+              <ion-button @click="showConditions" color="purple">conditions générales d'utilisation</ion-button>
+              <ion-checkbox color="success" slot="start"></ion-checkbox>
+              <div> J'accepte les Conditions Générales d'Utilisation</div>
             </div>
             <div class="text-right mt-8">
               <ion-button @click="register" color="purple" >S'inscrire</ion-button>
