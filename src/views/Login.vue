@@ -41,7 +41,7 @@
 
 <script>
 import { IonPage, IonContent, IonInput,
- IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel } from '@ionic/vue';
+ IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel, loadingController } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { checkCred } from '@/composables/mongoApi';
 import { get, set } from '@/composables/storage';
@@ -50,7 +50,7 @@ import { get, set } from '@/composables/storage';
 export default  {
   name: 'Login',
   components: { IonContent, IonPage, IonInput,
-   IonItem, IonButton, IonCard, IonCardContent, IonCardTitle, IonCardSubtitle, IonLabel},
+   IonItem, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonLabel},
 
   data(){
     return{
@@ -61,29 +61,47 @@ export default  {
   },
 
   methods:{
-        async checkCredentials(){
-          if(this.inptLogin != "" && this.inptMdp != ""){
-            try{
-                const valid = await checkCred(this.inptLogin,this.inptMdp);
-                if(valid){
-                  set('login',this.inptLogin);
-                  set('mdp',this.inptMdp);
-                  this.router.push('/tabs/accueil')
-                }
-                else{
-                  this.wrongCred = true;
-                }
+    async checkCredentials(){
+      if(this.inptLogin != "" && this.inptMdp != ""){
+        const loading = await this.startLoading();
+        try{
+            const valid = await checkCred(this.inptLogin,this.inptMdp);
+            if(valid){
+              set('login',this.inptLogin);
+              set('mdp',this.inptMdp);
+              this.router.push('/tabs/accueil')
             }
-            catch(err){
-                console.log(err);
-                throw err;
+            else{
+              this.wrongCred = true;
             }
-          }
-          else{
-            this.wrongCred = true;
-          }
         }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+        this.stopLoading(loading);  
+      }
+      else{
+        this.wrongCred = true;
+      }
     },
+
+    async startLoading(){
+      const loading = await loadingController.create({
+        message: 'Veuillez patienter pendant la connexion'
+      })
+
+      await loading.present()
+
+      return loading
+    },
+
+    stopLoading(loading){
+      if(loading !== null){
+        loading.dismiss()
+      }
+    }
+  },
     
   setup(){
     const router = useRouter();
@@ -94,7 +112,7 @@ export default  {
     const login = await get('login');
     const mdp = await get('mdp');
     if(login!=null && mdp!=null){
-      // eslint-disable-next-line no-useless-catch
+      const loading = await this.startLoading();
       try{
         const valid = await checkCred(login,mdp);
         if(valid){
@@ -105,8 +123,9 @@ export default  {
         }
       }
       catch(err){
-          throw err;
+        console.error(err)
       }
+      this.stopLoading(loading);
     }
   }
 }
