@@ -58,6 +58,9 @@
                 </div>
               </div>
             </div>
+            <div>
+              <ion-button @click="showConditions">conditions</ion-button>
+            </div>
             <div class="text-right mt-8">
               <ion-button @click="register" color="purple" >S'inscrire</ion-button>
               <router-link to="/login">
@@ -76,9 +79,10 @@
 
 <script>
 import { IonPage, IonContent,
- IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard } from '@ionic/vue';
+ IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard, modalController } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { storeNewUser, sendFilesToMongo, verifyLoginAvailable } from '@/composables/mongoApi';
+import ModalConditions from '@/components/ModalConditions.vue';
 
 export default  {
   name: 'Inscription',
@@ -102,7 +106,6 @@ export default  {
 
   methods:{
     async register(){
-      //TO DO : ajouter la verification pour savoir si le login est deja pris
       try{
         if(this.nom != "" && this.prenom != "" && this.login != "" && this.mail != "" && this.mdp != "" && this.confirm != ""){
           if(this.mdp == this.confirm){
@@ -163,6 +166,17 @@ export default  {
       else{
         this.filePhoto = null
       }
+    },
+
+    async showConditions(){
+      const modal = await modalController.create({
+        component: ModalConditions,
+        componentProps: {
+          title: 'Conditions d\'utilisations'
+        }
+      })
+
+      await modal.present();
     }
   },
 
