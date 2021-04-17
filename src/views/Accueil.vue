@@ -98,7 +98,7 @@ export default  {
       }
     }
     
-    const sendSms = (alert) => {
+    const sendSms = async (alert) => {
       console.log(alert.sms + ' ' + JSON.stringify(alert.contactsSelected) + ' ' + alert.sendPosInSms + ' ' + alert.send114)
       for(const contact of alert.contactsSelected){
         console.log(contact.name + ' ' + contact.tel)
