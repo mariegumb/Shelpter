@@ -5,17 +5,19 @@
         </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-        <div>
-            <ion-item>
-                <ion-label position="floating">Search the user by login</ion-label>
-                <ion-input type="search" @ionChange="onChangeSearch"/>
-            </ion-item>
-        </div>
-        <div v-for="user in usersFiltred" v-bind:key="user.id">
-            <button @click="onApply(user.login)">{{user.login}}</button>
-        </div>
-        <div class="flex justify-center">
-            <ion-button @click="onCancel" color="light">Cancel</ion-button>
+        <div class="m-7 mt-8">
+            <div>
+                <ion-item class="text-purple-600">
+                    <ion-label position="floating">Login</ion-label>
+                    <ion-input type="search" @ionChange="onChangeSearch"/>
+                </ion-item>
+            </div>
+            <div v-for="user in usersFiltred" v-bind:key="user.id">
+                <button @click="onApply(user.login)">{{user.login}}</button>
+            </div>
+            <div class="flex justify-center mt-5">
+                <ion-button @click="onCancel" color="light">Fermer</ion-button>
+            </div>
         </div>
     </ion-content>
 </template>
