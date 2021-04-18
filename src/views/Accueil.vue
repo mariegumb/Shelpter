@@ -38,6 +38,7 @@ import { Plugins } from '@capacitor/core';
 import { computed, ref } from '@vue/runtime-core';
 import { SMS } from '@ionic-native/sms'
 import { CallNumber } from '@ionic-native/call-number'
+import { MediaCapture } from '@ionic-native/media-capture'
 const { Geolocation } = Plugins;
 
 export default  {
@@ -125,6 +126,16 @@ export default  {
       }
     }
 
+    const recordMic = async () => {
+      const audio = await MediaCapture.captureAudio()
+      console.log(JSON.stringify(audio))
+    }
+
+    const recordCam = async () => {
+      const video = await MediaCapture.captureVideo()
+      console.log(JSON.stringify(video))
+    }
+
     const activateAlert = async (alert) => {
       if(alert.tel){
         emitter.emit('phone')
@@ -137,6 +148,14 @@ export default  {
       }
       if(alert.call){
         call(alert)
+      }
+      if(alert.record){
+        if(alert.recordInfo === 'mic'){
+          recordMic()
+        }
+        else if(alert.recordInfo === 'cam'){
+          recordCam()
+        }
       }
       const toast = await toastController.create({
         message: 'l\'alerte a bien été lancée',
