@@ -29,7 +29,7 @@
             <ion-item class="ion-no-padding">
               <ion-input v-model="confirm" placeholder="Confirmation mot de passe" type="password"></ion-input>
             </ion-item>
-            <div v-if="error">
+            <div v-if="error" class="text-red-400">
               <ion-label>{{errorMsg}}</ion-label>
             </div>
              <div class="mt-8 flex justify-between items-center">
@@ -59,9 +59,8 @@
               </div>
             </div>
             <div class="mt-6 flex justify-between items-center">
-              <ion-button @click="showConditions" color="purple">conditions générales d'utilisation</ion-button>
-              <ion-checkbox color="success" slot="start"></ion-checkbox>
-              <div> J'accepte les Conditions Générales d'Utilisation</div>
+              <ion-checkbox class="ml-2" color="primary" style="width:12%;height:12%;" v-model="conditions"></ion-checkbox>
+              <div class="text-center px-5">J'accepte les <a class="underline" @click="showConditions">Conditions Générales d'Utilisation</a></div>
             </div>
             <div class="text-right mt-8">
               <ion-button @click="register" color="purple" >S'inscrire</ion-button>
@@ -81,7 +80,7 @@
 
 <script>
 import { IonPage, IonContent,
- IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard, modalController } from '@ionic/vue';
+ IonItem, IonLabel, IonButton, IonInput, IonCardContent, IonCard, modalController, IonCardTitle, IonCheckbox, IonCardHeader } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { storeNewUser, sendFilesToMongo, verifyLoginAvailable } from '@/composables/mongoApi';
 import ModalConditions from '@/components/ModalConditions.vue';
@@ -89,7 +88,7 @@ import ModalConditions from '@/components/ModalConditions.vue';
 export default  {
   name: 'Inscription',
   components: { IonContent,
-   IonPage, IonItem, IonButton, IonInput, IonCardContent, IonCard, IonLabel},
+   IonPage, IonItem, IonButton, IonInput, IonCardContent, IonCard, IonLabel, IonCardTitle, IonCheckbox, IonCardHeader },
   
   data(){
     return{
@@ -103,6 +102,7 @@ export default  {
       errorMsg: "",
       fileId: null,
       filePhoto: null,
+      conditions: false,
     }
   },
 
@@ -112,23 +112,29 @@ export default  {
         if(this.nom != "" && this.prenom != "" && this.login != "" && this.mail != "" && this.mdp != "" && this.confirm != ""){
           if(this.mdp == this.confirm){
             if(await verifyLoginAvailable(this.login)){
-              if(this.filePhoto !== null && this.fileId !== null){
-                const { fileIdId, filePhotoId } = await sendFilesToMongo(this.fileId, this.filePhoto);
-                const user = {
-                  login: this.login,
-                  mdp: this.mdp,
-                  nom: this.nom,
-                  prenom: this.prenom,
-                  mail: this.mail,
-                  fileId: fileIdId,
-                  filePhoto: filePhotoId,
-                };
-                await storeNewUser(user);
-                this.router.go(-1);
+              if(this.conditions){
+                if(this.filePhoto !== null && this.fileId !== null){
+                  const { fileIdId, filePhotoId } = await sendFilesToMongo(this.fileId, this.filePhoto);
+                  const user = {
+                    login: this.login,
+                    mdp: this.mdp,
+                    nom: this.nom,
+                    prenom: this.prenom,
+                    mail: this.mail,
+                    fileId: fileIdId,
+                    filePhoto: filePhotoId,
+                  };
+                  await storeNewUser(user);
+                  this.router.go(-1);
+                }
+                else{
+                  this.error = true;
+                  this.errorMsg = "Veuillez joindre les fichiers demandés";
+                }
               }
               else{
                 this.error = true;
-                this.errorMsg = "Veuillez joindre les fichiers demandés";
+                this.errorMsg = "Vous devez accepter les conditions d'utilisations"
               }
             }
             else{
