@@ -7,13 +7,13 @@ qqqqq<template>
     <ion-content class="ion-padding">
         <div>
             <div>
-                <div class="h-27 w-26 mt-3 ml-3">
-                    <img v-if="user.photo !== 'photoNotFound'" v-bind:src="user.photo" class="rounded-full h-27 w-26"/>
+                <div class="flex justify-center">
+                    <img v-if="user.photo !== 'photoNotFound'" v-bind:src="user.photo" class="rounded-full h-40 w-40"/>
                     <svg v-else class="h-24 w-24 text-purple-600 rounded-full" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                 </div>
-                <div class="text-center text-purple-800 font-bold text-3xl pl-4 ">
+                <div class="text-center text-purple-800 font-bold text-3xl">
                     {{user.login}}
                 </div>
             </div>
@@ -34,15 +34,15 @@ qqqqq<template>
             <div class="flex pt-4 justify-center mt-2 text-xl font-bold">
                   <div class="mx-2 text-center">
                     <span>Aidés</span>
-                    <span class="block">3</span>
+                    <span class="block">0</span>
                   </div>
                   <div class="mx-2 text-center">
                     <span>Protégés</span>
-                    <span class="block">2</span>
+                    <span class="block">{{mesProteges.length}}</span>
                   </div>
                   <div class="mx-2 text-center">
                     <span>Protecteurs</span>
-                    <span class="block">5</span>
+                    <span class="block">{{mesProtecteurs.length}}</span>
                   </div>
             </div>
 
@@ -59,6 +59,7 @@ qqqqq<template>
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, modalController } from '@ionic/vue';
 import { defineComponent } from "vue";
+import { getMesProtecteurs, getMesProteges } from '@/composables/mongoApi'
 
 export default defineComponent({
     name: 'ModalInfoUser',
@@ -70,8 +71,8 @@ export default defineComponent({
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton },
     data(){
         return{
-            users: [],
-            usersFiltred: [],
+            mesProtecteurs: [],
+            mesProteges: [],
         }
     },
     methods:{
@@ -86,7 +87,16 @@ export default defineComponent({
         },
         supprimerRole(){
             this.onDismiss({action: 'supprimer', role: this.role, login: this.user.login})
-        }
+        },
+        async loadProtect(){
+            const mesProtecteurs = await getMesProtecteurs(this.user.login);
+            this.mesProtecteurs = mesProtecteurs;
+            const mesProteges = await getMesProteges(this.user.login);
+            this.mesProteges = mesProteges;
+        },
     },
+    mounted(){
+        this.loadProtect();
+    }
 });
 </script>
