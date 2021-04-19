@@ -2,7 +2,7 @@
     <ion-page>
         <Header/>
         <ion-content :fullScreen="true">
-            <div v-for="alert in alerts" v-bind:key="alert.id">
+            <div v-for="alert in JSON.parse(JSON.stringify(alerts)).reverse()" v-bind:key="alert.id">
                 <div className="m-2" v-if="alert.user != this.user">
                     <!-- status 1 : alerte en cours -->
                     <div class="p-3 w-full rounded-lg bg-red-300 text-red-900 text-center" v-if="alert.status === 1" @click="clickAlert(alert)">
@@ -10,7 +10,7 @@
                         <div class="italic">"{{alert.message}}"</div>
                     </div>
                     <!-- status 2 : alerte passee pour garder une trace -->
-                    <div class="p-3 w-full rounded-lg bg-gray-300 text-gray-700 text-center" v-if="alert.status === 2">
+                    <div class="p-3 w-full rounded-lg bg-gray-300 text-gray-700 text-center" v-if="alert.status === 0">
                         <div class="italic mb-2 text-md">Alerte terminée</div>
                         <div class="text-xs">{{alert.user}} a besoin d'aide</div>
                         <div class="text-xs italic">"{{alert.message}}"</div>

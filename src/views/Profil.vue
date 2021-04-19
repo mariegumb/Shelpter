@@ -212,7 +212,7 @@ export default {
     async deconnect(){
       await remove('login');
       await remove('mdp');
-      this.router.go('/login')
+      this.router.push('/login')
     },
 
     async openSettings(){
