@@ -137,8 +137,8 @@ export const getMesProteges = async (login) => {
     return proteges;
 }
 
-export const addHelper = async (alerteId,login) => {
-    const res = await axios.post(addr + '/helped', {login: login, alerteId: alerteId});
+export const addHelper = async (idAlerte,login) => {
+    const res = await axios.post(addr + '/helped', {login: login, idAlerte: idAlerte});
     return res.data;
 }
 
