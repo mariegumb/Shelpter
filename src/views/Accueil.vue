@@ -17,7 +17,7 @@
               <div class="w-full my-2 px-3 py-2 rounded bg-red-200 text-red-600 font-italic">      
                 "{{alertEnCours.message}}"
               </div>
-              <button class="w-full bg-purple-500 text-white rounded px-2 py-1 hover:bg-purple-600" @click="cancelAlert()">Marquer cette alerte comme résolue</button>
+              <button class="w-full bg-purple-500 text-white rounded px-2 py-1 hover:bg-purple-600" @click="cancelAlert()">Marquer cette alerte comme terminée</button>
             </div>
         </div>
       </ion-content>
@@ -25,15 +25,14 @@
 </template>
 
 <script>
-import { loadingController, toastController } from '@ionic/vue';
+import { loadingController, toastController, modalController } from '@ionic/vue';
+import ModalAddHelper from '@/components/ModalAddHelper.vue'
 import { IonPage, IonContent } from '@ionic/vue';
 import Header from '@/components/Header';
 import {get} from '@/composables/storage'
 import { emitter } from '@/emitter';
 import { socket } from '@/composables/useSocket'
-import { getAllAlerts, updateAlert } from '@/composables/mongoApi';
-import { getUserByLogin } from '@/composables/mongoApi';
-import { throwAlert } from '@/composables/mongoApi';
+import { throwAlert, getAllAlerts, updateAlert, getUserByLogin, addHelper } from '@/composables/mongoApi';
 import { Plugins } from '@capacitor/core';
 import { computed, ref } from '@vue/runtime-core';
 import { SMS } from '@ionic-native/sms'
@@ -43,7 +42,8 @@ const { Geolocation } = Plugins;
 
 export default  {
   name: 'Accueil',
-  components: { IonPage, Header, IonContent },
+  // eslint-disable-next-line vue/no-unused-components
+  components: { IonPage, Header, IonContent, ModalAddHelper },
   updated(){
       this.fetchAlerts()
   },
@@ -69,9 +69,33 @@ export default  {
           notifications.value = await getAllAlerts();
     }
 
+    const openModal = async () => {
+      const modal = await modalController
+        .create({
+          component: ModalAddHelper,
+          componentProps: {
+            title: 'Qui vous a aider ?'
+          },
+        })
+        modal.present();
+
+      const {data:{login}} = await modal.onDidDismiss()
+      if(login){
+        await addHelper( alertEnCours.value._id, login)
+        await updateAlert({alertId : alertEnCours.value._id, status: 0})
+        notifications.value = await getAllAlerts();
+        const toast = await toastController.create({
+          message: 'Alerte terminée.',
+          duration: 3000
+        })
+        await toast.present();
+      }
+    }
+
     const cancelAlert = async () => {
-      await updateAlert({alertId : alertEnCours.value._id, status: 0})
-      notifications.value = await getAllAlerts();
+      openModal()
+      //await updateAlert({alertId : alertEnCours.value._id, status: 0})
+      //notifications.value = await getAllAlerts();
     }
 
     const sendPos = async (alert) => {
@@ -141,7 +165,7 @@ export default  {
         emitter.emit('phone')
       }
       if(alert.map){
-        sendPos(alert)
+        await sendPos(alert)
       }
       if(alert.sendSms){
         sendSms(alert)

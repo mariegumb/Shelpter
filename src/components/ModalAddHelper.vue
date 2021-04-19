@@ -6,15 +6,22 @@
     </ion-header>
     <ion-content class="ion-padding">
         <div class="m-7 mt-8">
+            <div class="px-3">
+                <span>
+                    Veuillez entrer le login de l'utilisateur qui vous est venu en aide
+                </span>
+            </div>
             <div>
                 <ion-item class="text-purple-600">
                     <ion-label position="floating">Login</ion-label>
                     <ion-input type="search" @ionChange="onChangeSearch"/>
                 </ion-item>
             </div>
-            <div v-for="user in usersFiltred" v-bind:key="user.id">
-                <button @click="onApply(user.login)">{{user.login}}</button>
-            </div>
+            <ion-list>
+                <ion-item @click="onApply(user.login)" v-for="user in usersFiltred" v-bind:key="user.id">
+                    <ion-label>{{user.login}}</ion-label>
+                </ion-item>
+            </ion-list>
             <div class="flex justify-center mt-5">
                 <ion-button @click="onCancel" color="light">Fermer</ion-button>
             </div>
@@ -28,12 +35,11 @@ import { defineComponent } from "vue";
 import { getUsers } from '@/composables/mongoApi';
 
 export default defineComponent({
-    name: 'ModalAddHelper',
+    name: 'ModalAddProtect',
     props: {
         title: String,
         role: String,
         myLogin: String,
-        already: []
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton, IonInput, IonLabel, IonItem },
     data(){
@@ -47,7 +53,7 @@ export default defineComponent({
             this.onDismiss("cancel")
         },
         onApply(login){
-            this.onDismiss({role: this.role, login: login})
+            this.onDismiss({login: login})
         },
         onDismiss(result){
             modalController.dismiss(result);
@@ -59,7 +65,7 @@ export default defineComponent({
             else{
                 const filtred = [];
                 for(const user of this.users){
-                    if(user.login.includes(event.detail.value) && user.login !== this.myLogin && !this.already.includes(user.login)){
+                    if(user.login.includes(event.detail.value) && user.login !== this.myLogin){
                         filtred.push(user)
                     }
                 }
