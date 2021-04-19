@@ -34,7 +34,7 @@ qqqqq<template>
             <div class="flex pt-4 justify-center mt-2 text-xl font-bold">
                   <div class="mx-2 text-center">
                     <span>Aidés</span>
-                    <span class="block">0</span>
+                    <span class="block">{{ mesAides.length }}</span>
                   </div>
                   <div class="mx-2 text-center">
                     <span>Protégés</span>
@@ -59,7 +59,7 @@ qqqqq<template>
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, modalController } from '@ionic/vue';
 import { defineComponent } from "vue";
-import { getMesProtecteurs, getMesProteges } from '@/composables/mongoApi'
+import { getHelpedByLogin, getMesProtecteurs, getMesProteges } from '@/composables/mongoApi'
 
 export default defineComponent({
     name: 'ModalInfoUser',
@@ -73,6 +73,7 @@ export default defineComponent({
         return{
             mesProtecteurs: [],
             mesProteges: [],
+            mesAides: [],
         }
     },
     methods:{
@@ -93,6 +94,8 @@ export default defineComponent({
             this.mesProtecteurs = mesProtecteurs;
             const mesProteges = await getMesProteges(this.user.login);
             this.mesProteges = mesProteges;
+            const mesAides = await getHelpedByLogin(this.user.login);
+            this.mesAides = mesAides;
         },
     },
     mounted(){

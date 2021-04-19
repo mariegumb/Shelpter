@@ -68,7 +68,7 @@
                 <div class="flex pt-4 justify-center">
                   <div class="mx-2 text-lg text-center">
                     <span>Aidés</span>
-                    <span class="block text-lg">{{ countHelp }}</span>
+                    <span class="block text-lg">{{ mesAides.length }}</span>
                   </div>
                   <div class="mx-2 text-lg text-center">
                     <span>Protégés</span>
@@ -164,7 +164,7 @@ import ModalAddProtect from '@/components/ModalAddProtect';
 import ModalInfoUser from '@/components/ModalInfoUser';
 
 import { get } from '@/composables/storage';
-import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect, getProfilePhoto } from '@/composables/mongoApi';
+import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect, getProfilePhoto, getHelpedByLogin } from '@/composables/mongoApi';
 
 const roleProtege = 'protegé';
 const roleProtecteur = 'protecteur';
@@ -194,7 +194,7 @@ export default {
       mesProteges: [],
       showDonationInfo: true,
       photoUrl: '',
-      countHelp: 0,
+      mesAides: [],
     }
   },
   async beforeMount(){
@@ -313,6 +313,8 @@ export default {
       this.mesProtecteurs = mesProtecteurs;
       const mesProteges = await getMesProteges(this.me.login);
       this.mesProteges = mesProteges;
+      const mesAides = await getHelpedByLogin(this.me.login);
+      this.mesAides = mesAides;
     },
     async openInfoUser(user,role){
       console.log(role)
