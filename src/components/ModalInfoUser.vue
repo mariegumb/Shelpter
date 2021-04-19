@@ -1,4 +1,4 @@
-qqqqq<template>
+<template>
     <ion-header>
         <ion-toolbar>
             <ion-title>{{ title }}</ion-title>
