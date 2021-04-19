@@ -5,7 +5,6 @@
         </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-<!-- This example requires Tailwind CSS v2.0+ -->
         <div class="place-items-stretch">
             <div class="flex-col items-center">
                 <div class="mt-3 flex justify-center">
@@ -113,12 +112,13 @@
         <div class="flex justify-center mt-3">
             <ion-button @click="onClose" color="light">Fermer</ion-button>
         </div>
-        <ion-button color="red-400" class="flex m-5 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-red-400 hover:bg-red-500">Supprimer son compte</ion-button>
+        <!--<ion-button @click="deleteAccount" color="red-400" class="flex m-5 items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-red-400 hover:bg-red-500">Supprimer son compte</ion-button>
+        -->
     </ion-content>
 </template>
 
 <script>
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, modalController } from '@ionic/vue';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, modalController, alertController } from '@ionic/vue';
 import { defineComponent } from "vue";
 
 import { getPhotoUrl, changePhoto, getUserByLogin } from '@/composables/mongoApi';
@@ -167,6 +167,22 @@ export default defineComponent({
         },
         onClickApply(){
             console.log(this.dataMe)
+        },
+        async deleteAccount(){
+            const alertDelete = await alertController.create({
+                header:'Suppression de compte',
+                message: 'Etes vous bien sur de vouoir supprimer votre compte ? Aucun retour en arriere ne sera possible',
+                buttons: [
+                    {
+                        text:'Annuler'
+                    },
+                    {
+                        text:'Supprimer'
+                    }
+                ]
+            })
+
+            await alertDelete.present()
         }
     },
     async beforeMount(){

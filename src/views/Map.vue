@@ -2,32 +2,26 @@
     <ion-page>
         <Header/>
         <ion-content :fullScreen="true">
-            <div>
-              <div v-if="coords">
-                <p class="pl-3 pt-2">longitude: {{coords.longitude}}</p>
-                <p class="pl-3">latitude: {{coords.latitude}}</p>
-              </div>
+
+            <div id="map" style="height:500px" class="mt-5"></div>
+
+            <div class="flex justify-center">
+              <ion-button @click="centerMap" color="purple">Recentrer la carte sur moi</ion-button>
             </div>
-
-            <div id="map" style="height:500px"></div>
-
-            <ion-button @click="centerMap" color="purple">Recentrer la carte</ion-button>
             <div class="mt-3">
-              <p class="font-bold text-center"> X personnes sont à proximités</p>
               
-              <!--ATTENTION A Modifier*/-->
               
-              <ion-item class="text-sm text-center text-purple-600 mt-3">
+              <div class="text-sm text-center text-purple-600 mt-3 flex items-center justify-between px-4">
                   <ion-label>Avertir de ma présence en tant que Justicier</ion-label>
-                  <ion-toggle v-model="this.tel"/>
-              </ion-item>
+                  <ion-toggle v-model="this.showMyPos"/>
+              </div>
             </div>
         </ion-content>
     </ion-page>
 </template>
 
 <script>
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonToggle, IonLabel } from '@ionic/vue';
 import Header from '@/components/Header';
 import { Plugins } from '@capacitor/core';
 import { socket } from '@/composables/useSocket'
@@ -38,7 +32,7 @@ const { Geolocation } = Plugins;
 
 export default defineComponent({
     name:"Map",
-    components: {IonPage, IonContent, Header, IonButton },
+    components: {IonPage, IonContent, Header, IonButton, IonToggle, IonLabel },
     props: ['long','lat'],
     data(){
       return {
@@ -46,7 +40,8 @@ export default defineComponent({
         map: null,
         myPos: null,
         users: [],
-        watch: null
+        watch: null,
+        showMyPos: false,
       }
     },
     methods:{

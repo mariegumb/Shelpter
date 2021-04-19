@@ -146,3 +146,28 @@ export const getHelpedByLogin = async (login) => {
     const res = await axios.get(addr+'/helped/'+login);
     return res.data;
 }
+
+export const getGradeName = (mesAides) => {
+    const countHelped = mesAides.length
+    if(countHelped === 0){
+      return 'Débutant'
+    }
+    else if(countHelped > 0 && countHelped < 3){
+      return 'Mini justicier'
+    }
+    else if(countHelped >= 3 && countHelped < 5){
+      return 'Apprenti justicier'
+    }
+    else if(countHelped >= 5 && countHelped < 7){
+      return 'Justicier'
+    }
+    else if(countHelped >= 7 && countHelped < 11){
+      return 'Grand justicier'
+    }
+    else if(countHelped >= 11 && countHelped < 15){
+      return 'Justicier de l\'extreme'
+    }
+    else if(countHelped >= 15){
+      return 'Super héro'
+    }
+  }
