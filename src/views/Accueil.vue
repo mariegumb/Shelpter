@@ -2,23 +2,30 @@
   <ion-page>
     <Header/>
       <ion-content :fullscreen="true">
-        <div v-if="!alertEnCours && alerts" class="h-full flex items-center">
+        <div v-if="!alertEnCours && alerts" class="h-full">
+          <div v-if="alerts.length === 0" class="h-full flex items-center mx-10 text-center text-xl">
+            Vous pouvez créer des alertes dans l'onglet réglages
+          </div>
+          <div v-else class="h-full flex items-center">
             <div  class="w-full grid grid-cols-2">
               <div :class="{'col-span-2 text-center' : alerts.length % 2 === 1 && index === alerts.length -1}" v-for="(alert, index) in alerts" v-bind:key="index">
                 <button @click="activateAlert(alert)" type="button" class="rounded-full w-40 h-40 focus:outline-none text-white text-2xl my-3 mx-3" :class="alert.color + ' focus:' + alert.color.replace('500','600')" v-if="alert!==null">
                   {{alert.name}}
                 </button>
               </div>
-            </div>              
-        </div>
-        <div v-else class="h-full flex p-4">
-          <div class="text-red-500 font-bold w-full">
-              Vos coordonnée ainsi que le message suivant on été transmis à la communauté :
-              <div class="w-full my-2 px-3 py-2 rounded bg-red-200 text-red-600 font-italic">      
-                "{{alertEnCours.message}}"
-              </div>
-              <button class="w-full bg-purple-500 text-white rounded px-2 py-1 hover:bg-purple-600" @click="cancelAlert()">Marquer cette alerte comme terminée</button>
             </div>
+          </div>
+        </div>
+        <div v-else class="h-full flex items-center p-4">
+          <div class="text-red-500 font-bold w-full">
+            Vos coordonnée ainsi que le message suivant on été transmis à la communauté :
+            <div class="w-full my-2 px-3 py-2 rounded bg-red-200 text-red-600 font-italic">      
+              "{{alertEnCours.message}}"
+            </div>
+            <button class="w-full bg-purple-500 text-white rounded px-2 py-1 hover:bg-purple-600" @click="cancelAlert()">
+              Marquer cette alerte comme terminée
+            </button>
+          </div>
         </div>
       </ion-content>
     </ion-page>
@@ -70,18 +77,22 @@ export default  {
     }
 
     const openModal = async () => {
+      const myLogin = await get('login')
       const modal = await modalController
         .create({
           component: ModalAddHelper,
           componentProps: {
-            title: 'Qui vous a aider ?'
+            title: 'Qui vous a aider ?',
+            myLogin: myLogin
           },
         })
-        modal.present();
+      await modal.present();
 
-      const {data:{login}} = await modal.onDidDismiss()
-      if(login){
-        await addHelper( alertEnCours.value._id, login)
+      const {data:{logins}} = await modal.onDidDismiss()
+      if(logins){
+        for(const login of logins){
+          await addHelper(alertEnCours.value._id, login)
+        }
         await updateAlert({alertId : alertEnCours.value._id, status: 0})
         notifications.value = await getAllAlerts();
         const toast = await toastController.create({

@@ -6,24 +6,42 @@
     </ion-header>
     <ion-content class="ion-padding">
         <div class="m-7 mt-8">
-            <div class="px-3">
+            <div class="px-3 text-center">
                 <span>
-                    Veuillez entrer le login de l'utilisateur qui vous est venu en aide
+                    Veuillez entrer les logins des utilisateurs qui vous sont venus en aide
                 </span>
             </div>
             <div>
                 <ion-item class="text-purple-600">
                     <ion-label position="floating">Login</ion-label>
-                    <ion-input type="search" @ionChange="onChangeSearch"/>
+                    <ion-input type="search" @ionChange="onChangeSearch" v-model="searchValue"/>
                 </ion-item>
             </div>
             <ion-list>
-                <ion-item @click="onApply(user.login)" v-for="user in usersFiltred" v-bind:key="user.id">
+                <ion-item @click="addHelper(user.login)" v-for="user in usersFiltred" v-bind:key="user.id">
                     <ion-label>{{user.login}}</ion-label>
                 </ion-item>
             </ion-list>
+            <div class="flex justify-center text-xl mt-8">
+                <div v-if="helpers.length === 0">
+                    Aucun utilisateur selectionné
+                </div>
+                <ul v-else class="list-disc">
+                    <li v-for="(loginHelper,i) in helpers" v-bind:key="loginHelper">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                {{loginHelper}}
+                            </div>
+                            <ion-button color="purple" class="ml-4 w-3 h-6" @click="removeHelper(i)">
+                                X
+                            </ion-button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
             <div class="flex justify-center mt-5">
-                <ion-button @click="onCancel" color="light">Fermer</ion-button>
+                <ion-button @click="onCancel" color="light">Annuler</ion-button>
+                <ion-button @click="onApply" color="purple">Valider</ion-button>
             </div>
         </div>
     </ion-content>
@@ -38,7 +56,6 @@ export default defineComponent({
     name: 'ModalAddProtect',
     props: {
         title: String,
-        role: String,
         myLogin: String,
     },
     components:{ IonContent,IonHeader,IonTitle,IonToolbar, IonButton, IonInput, IonLabel, IonItem },
@@ -46,14 +63,16 @@ export default defineComponent({
         return{
             users: [],
             usersFiltred: [],
+            helpers: [],
+            searchValue: '',
         }
     },
     methods:{
         onCancel(){
             this.onDismiss("cancel")
         },
-        onApply(login){
-            this.onDismiss({login: login})
+        onApply(){
+            this.onDismiss({logins: this.helpers})
         },
         onDismiss(result){
             modalController.dismiss(result);
@@ -72,6 +91,15 @@ export default defineComponent({
                 this.usersFiltred = filtred;
             }
         },
+        addHelper(login){
+            this.searchValue = '';
+            if(!this.helpers.includes(login)){
+                this.helpers.push(login)
+            }
+        },
+        removeHelper(i){
+            this.helpers.splice(i,1)
+        }
     },
     async beforeMount(){
         this.users = await getUsers();
