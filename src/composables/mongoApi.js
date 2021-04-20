@@ -147,6 +147,16 @@ export const getHelpedByLogin = async (login) => {
     return res.data;
 }
 
+export const acceptHelp = async (login,idAlerte) => {
+    const res = await axios.post(addr+'/accept',{idAlerte: idAlerte, login: login});
+    return res.data
+}
+
+export const getSafeZones = async () => {
+    const res = await axios.get(addr+'/safezone');
+    return res.data;
+}
+
 export const getGradeName = (mesAides) => {
     const countHelped = mesAides.length
     if(countHelped === 0){

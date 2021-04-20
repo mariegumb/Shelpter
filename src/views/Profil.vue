@@ -148,7 +148,7 @@
             </svg>
           </div>
           -->
-          <ion-button @click="openSureDeconnect" color="purple-600" class="mt-8 flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-semibold text-white bg-purple-600 hover:bg-purple-50">Déconnexion</ion-button>         
+          <ion-button @click="openSureDeconnect" color="purple" class="mt-8 flex items-center justify-center">Déconnexion</ion-button>         
         </ion-content>
     </ion-page>
 </template>

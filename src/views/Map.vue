@@ -25,9 +25,10 @@ import { IonPage, IonContent, IonButton, IonToggle, IonLabel } from '@ionic/vue'
 import Header from '@/components/Header';
 import { Plugins } from '@capacitor/core';
 import { socket } from '@/composables/useSocket'
-import { Map, tileLayer, marker, icon, popup } from 'leaflet';
+import { Map, tileLayer, marker, icon, popup, circle } from 'leaflet';
 import { defineComponent } from 'vue';
-import { get, remove } from '@/composables/storage'
+import { get, remove } from '@/composables/storage';
+import { getSafeZones } from '@/composables/mongoApi';
 const { Geolocation } = Plugins;
 
 export default defineComponent({
@@ -74,7 +75,7 @@ export default defineComponent({
         })
       },
 
-      initMap(){
+      async initMap(){
         const location = { latitude: 46.866573725968756, longitude: 2.673486775390641}
         const zoom = 5;
         console.log()
@@ -82,6 +83,17 @@ export default defineComponent({
         tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.map);
+
+        const safeZones = await getSafeZones();
+        for(const safeZone of safeZones){
+          console.log(safeZone);
+          circle([safeZone.latitude,safeZone.longitude], {
+            color: 'purple',
+            fillOpacity: 0.5,
+            radius: 40,
+          }).addTo(this.map)
+        }
+
         this.initPosMap();
       },
 

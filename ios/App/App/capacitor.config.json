@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "securitel",
+  "appName": "Shelpter",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
