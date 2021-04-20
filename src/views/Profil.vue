@@ -48,7 +48,7 @@
               </div>
               <div class="flex-col mt-5 px-1 py-3">
                   <div class="flex justify-center">
-                    <div class="text-center">
+                    <div class="text-center" @click="openShowGrades">
                       <span class="flex items-center justify-between bg-yellow-500 text-black font-bold py-1 px-3 rounded-lg ">
                         <svg width="23" height="30" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-block">
                           <path d="M10.5461 2.36102C10.8398 1.42801 12.1602 1.42801 12.4539 2.36102L13.5856 5.95646L14.5394 5.65622L13.5856 5.95646C13.9789 7.2059 15.1373 8.05573 16.4472 8.05573H20.2412C21.2023 8.05573 21.6101 9.27913 20.8412 9.85574L17.6637 12.2389C16.6454 13.0025 16.2199 14.3256 16.602 15.5396L17.7898 19.3131C18.0816 20.24 17.0134 20.9964 16.2359 20.4133L13.3 18.2114C12.2333 17.4114 10.7667 17.4114 9.70003 18.2114L6.76406 20.4133C5.98664 20.9964 4.91844 20.24 5.21021 19.3131L6.39796 15.5396C6.78011 14.3256 6.35458 13.0025 5.33635 12.2389L2.15877 9.85574C1.38994 9.27913 1.79774 8.05573 2.75876 8.05573H6.55283C7.8627 8.05573 9.02113 7.2059 9.41441 5.95646L10.5461 2.36102Z" fill="#DBFF00" stroke="black" stroke-width="2"/>
@@ -165,6 +165,7 @@ import ModalProfilSettings from '@/components/ModalProfilSettings.vue';
 import ModalDonation from '@/components/ModalDonation.vue';
 import ModalAddProtect from '@/components/ModalAddProtect';
 import ModalInfoUser from '@/components/ModalInfoUser';
+import ModalShowGrades from '@/components/ModalShowGrades';
 
 import { get } from '@/composables/storage';
 import { getUserByLogin, getMesProtecteurs, getMesProteges, addProtect, removeProtect, getProfilePhoto, getHelpedByLogin, getGradeName } from '@/composables/mongoApi';
@@ -368,6 +369,16 @@ export default {
         }
       }
     },
+    async openShowGrades(){
+      const showGrades = await modalController.create({
+        component: ModalShowGrades,
+        componentProps: {
+          title: 'Titres de justicier'
+        }
+      })
+
+      await showGrades.present();
+    }
   }
 }
 </script>

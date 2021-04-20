@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <div v-else class="h-full flex items-center p-4">
+        <div v-else-if="alertEnCours" class="h-full flex items-center p-4">
           <div class="text-red-500 font-bold w-full">
             Vos coordonnée ainsi que le message suivant on été transmis à la communauté :
             <div class="w-full my-2 px-3 py-2 rounded bg-red-200 text-red-600 font-italic">      
@@ -26,6 +26,9 @@
               Marquer cette alerte comme terminée
             </button>
           </div>
+        </div>
+        <div v-else class="h-full flex items-center mx-10 text-center text-xl">
+            Vous pouvez créer des alertes dans l'onglet réglages
         </div>
       </ion-content>
     </ion-page>
@@ -70,6 +73,7 @@ export default  {
 
     const fetchAlerts =  async () => {
       alerts.value = await get('alerts')
+      console.log(alerts)
     }
 
     const getNotifications = async () => {
