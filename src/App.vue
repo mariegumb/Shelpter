@@ -13,6 +13,7 @@ import { emitter } from './emitter'
 import FakeCall from './components/fakeCall.vue';
 import { Plugins } from '@capacitor/core';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 const { Geolocation } = Plugins;
 
 export default defineComponent({
@@ -59,7 +60,7 @@ export default defineComponent({
       display,
     }
   },
-  created(){
+  async created(){
     const getPos = Geolocation.watchPosition({enableHighAccuracy: true}, (data,err) => {
       if(err){
         throw err;
@@ -67,6 +68,18 @@ export default defineComponent({
       Geolocation.clearWatch({id: getPos});
       console.log(data.coords.latitude+' '+data.coords.longitude);
     });
+
+    await AndroidPermissions.requestPermissions([
+      AndroidPermissions.PERMISSION.CAMERA,
+      AndroidPermissions.PERMISSION.SEND_SMS,
+      AndroidPermissions.PERMISSION.READ_CONTACTS,
+      AndroidPermissions.PERMISSION.RECORD_AUDIO,
+      AndroidPermissions.PERMISSION.RECORD_VIDEO,
+      AndroidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+      AndroidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
+      AndroidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
+      AndroidPermissions.PERMISSION.CALL_PHONE,
+    ])
   }
 });
 </script>

@@ -26,7 +26,7 @@
 <script>
 import { IonPage, IonContent, IonButton, alertController, modalController } from '@ionic/vue';
 import Header from '@/components/Header';
-import { getAllAlerts } from '@/composables/mongoApi';
+import { getAllAlerts, acceptHelp } from '@/composables/mongoApi';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { get, set } from '@/composables/storage';
 import { useRouter } from 'vue-router';
@@ -98,6 +98,7 @@ export default {
             await helpAlert.present();
         },
         async helpConfirm(alert){
+            await acceptHelp(this.user,alert._id)
             console.log(alert)
             await set('help',alert);
             this.router.replace('/tabs/map')
