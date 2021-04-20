@@ -6,7 +6,7 @@
     </ion-header>
     <ion-content class="ion-padding">
         <div style="display:flex;justify-content:flex-end;">
-            <ion-button @click="deleteAlert" color="danger">Supprimer</ion-button>
+            <ion-button @click="openAlertSupp" color="danger" v-if="showSuppBtn">Supprimer</ion-button>
         </div>
         <ion-item>
             <ion-label style="color:grey" position="stacked">Nom</ion-label>
@@ -140,7 +140,7 @@
 
 <script>
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonToggle, IonLabel,
- IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea, IonRadio, IonRadioGroup } from '@ionic/vue';
+ IonItem, IonInput, IonSelect, IonSelectOption, modalController, IonTextarea, IonRadio, IonRadioGroup, alertController } from '@ionic/vue';
 import { defineComponent } from "vue";
 import { Contacts } from '@ionic-native/contacts';
 
@@ -171,7 +171,9 @@ export default defineComponent({
             sharePosInfo: 'protectors',
             call: false,
             callInfo: 'police',
-            contactToCall: { name: 'someone', tel: 'none'}
+            contactToCall: { name: 'someone', tel: 'none'},
+
+            showSuppBtn: false,
         }
     },
     setup(){
@@ -202,6 +204,8 @@ export default defineComponent({
                 this.call = this.alert.call;
                 this.callInfo = this.alert.callInfo;
                 this.contactToCall = this.alert.contactToCall;
+                
+                this.showSuppBtn = true;
             }
         },
         onCancel(){
@@ -232,7 +236,6 @@ export default defineComponent({
             modalController.dismiss(result);
         },
         deleteAlert(){
-            //TO DO : USE ALERET TO ASK TO THE USER IF HE IS SURE TO DELETE
             this.onDismiss("delete");
         },
 
@@ -257,6 +260,24 @@ export default defineComponent({
         async chooseCaller(){
             const contact = await this.contacts.pickContact();
             this.contactToCall = { name: contact.displayName, tel: contact.phoneNumbers[0].value }
+        },
+
+        async openAlertSupp(){
+            const alertSupp = await alertController.create({
+                header: 'suppression d\'alerte',
+                message: 'Etes vous sur de vouloir supprimer l\'alerte '+this.name+' ?',
+                buttons: [
+                    {
+                        text: 'Annuler'
+                    },
+                    {
+                        text: 'Supprimer',
+                        handler: this.deleteAlert
+                    }
+                ]
+            })
+
+            await alertSupp.present();
         }
     }
 });

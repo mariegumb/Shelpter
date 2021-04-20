@@ -12,8 +12,10 @@
                     <ion-input type="search" @ionChange="onChangeSearch"/>
                 </ion-item>
             </div>
-            <div v-for="user in usersFiltred" v-bind:key="user.id">
-                <button @click="onApply(user.login)">{{user.login}}</button>
+            <div class="mt-4">
+                <div v-for="user in usersFiltred" v-bind:key="user.id">
+                    <button class="m-2 text-xl text-center w-full" @click="onApply(user.login)">{{user.login}}</button>
+                </div>
             </div>
             <div class="flex justify-center mt-5">
                 <ion-button @click="onCancel" color="light">Fermer</ion-button>

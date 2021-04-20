@@ -24,12 +24,13 @@
 </template>
 
 <script>
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, alertController, modalController } from '@ionic/vue';
 import Header from '@/components/Header';
 import { getAllAlerts } from '@/composables/mongoApi';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { get, set } from '@/composables/storage';
 import { useRouter } from 'vue-router';
+import ModalConditionsAide from '@/components/ModalConditionsAide.vue';
 
 export default {
     name:"Notifications",
@@ -67,10 +68,40 @@ export default {
             console.log(this.localNotifications);
         },
         async clickAlert(alert){
+            const helpAlert = await alertController.create({
+                header: 'Aider '+alert.user,
+                message: 'En acceptant d\'aider '+alert.user+' vous acceptez les conditions d\'aide de Shelpter',
+                buttons: [
+                    {
+                        text: 'Annuler'
+                    },
+                    {
+                        text: 'Voir les conditions',
+                        handler: async () => {
+                            const modalConditionsAide = await modalController.create({
+                                component: ModalConditionsAide,
+                                componentProps: {
+                                    title: 'Conditions d\'aide'
+                                }
+                            })
+
+                            await modalConditionsAide.present()
+                        }
+                    },
+                    {
+                        text: 'Confirmer',
+                        handler: () => this.helpConfirm(alert)
+                    }
+                ]
+            })
+
+            await helpAlert.present();
+        },
+        async helpConfirm(alert){
             console.log(alert)
             await set('help',alert);
             this.router.replace('/tabs/map')
-        }
+        },
     },
     async created(){
         await this.getAlerts();
